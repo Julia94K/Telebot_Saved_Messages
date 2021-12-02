@@ -1,6 +1,7 @@
 package com.teleBot.springboot.bot;
 
 import com.teleBot.springboot.commands.CommandList;
+import com.teleBot.springboot.commands.NotACommand;
 import com.teleBot.springboot.commands.StartCommand;
 import com.teleBot.springboot.commands.UnknownCommand;
 import com.teleBot.springboot.functions.SendMessageFunction;
@@ -35,14 +36,13 @@ public class MyTeleBot extends TelegramLongPollingBot {
         System.out.println("!!!");
         if (update.hasMessage() && update.getMessage().hasText()) {
             String message = update.getMessage().getText().trim();
-            //positive case - we answer with one of existing commands
+            //positive case - we answer with one of existing commands (if exists)
             if (message.startsWith("/")) {
                 String thisCommand = message.split(" ")[0].toLowerCase();
                 commandList.processWrongMessages(thisCommand).executeCommand(update);
                 System.out.println("command detected");
-            } // negative case - we answer that this command does not exist
+            } // negative case - we answer that this command is unknown
             else {
-//                commandList.processWrongMessages(StartCommand.START_MSG).executeCommand(update);
                 commandList.processWrongMessages(UnknownCommand.UNKNOWN_COMMAND).executeCommand(update);
             }
         }

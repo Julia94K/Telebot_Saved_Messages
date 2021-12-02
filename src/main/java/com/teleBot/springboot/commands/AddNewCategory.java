@@ -3,17 +3,16 @@ package com.teleBot.springboot.commands;
 import com.teleBot.springboot.functions.SendMessageInterface;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public class StopCommand implements Command {
-    public static final String STOP_MSG = "This bot was stopped!";
+public class AddNewCategory implements Command {
+    public static final String ADD_MSG = "You can add new category!";
     private final SendMessageInterface sendMessageInterface;
 
-    public StopCommand (SendMessageInterface sendMessageInterface) {
+    public AddNewCategory (SendMessageInterface sendMessageInterface) {
         this.sendMessageInterface = sendMessageInterface;
     }
 
     @Override
     public void executeCommand(Update update){
-        sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),STOP_MSG);
-
+        sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),ADD_MSG);
     }
 }

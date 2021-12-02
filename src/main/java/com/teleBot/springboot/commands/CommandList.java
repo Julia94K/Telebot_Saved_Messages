@@ -1,10 +1,8 @@
 package com.teleBot.springboot.commands;
 
 import com.teleBot.springboot.functions.SendMessageInterface;
-import com.teleBot.springboot.commands.NameOfCommand.*;
 import java.util.HashMap;
-
-import static com.teleBot.springboot.commands.NameOfCommand.START;
+import static com.teleBot.springboot.commands.NameOfCommand.*;
 
 
 public class CommandList {
@@ -12,20 +10,22 @@ public class CommandList {
     private final Command unknownCommand;
 
 
-    private String commandName;
-
 
     public CommandList(SendMessageInterface sendMessageInterface){
 
         //add here all commands
 
         commandMap.put(START.getNameOfCommand(),new StartCommand(sendMessageInterface));
+        commandMap.put(STOP.getNameOfCommand(),new StopCommand(sendMessageInterface));
+        commandMap.put(ADD.getNameOfCommand(),new AddNewCategory(sendMessageInterface));
+        commandMap.put(HELP.getNameOfCommand(),new HelpCommand(sendMessageInterface));
+        commandMap.put(NOT.getNameOfCommand(),new NotACommand(sendMessageInterface));
 
         unknownCommand = new UnknownCommand(sendMessageInterface);
 
+
     }
 
-//    public Command processCommands
 
     //обработка сообщений, которые не являются командами, ,будет браться дефолтное значение unknownCommand
 
@@ -33,8 +33,5 @@ public class CommandList {
         return commandMap.getOrDefault(wrongMessage,unknownCommand);
     }
 
-//    public Command answerUser(Command command){
-//        if (CommandMap.)
-//        }
 
 }

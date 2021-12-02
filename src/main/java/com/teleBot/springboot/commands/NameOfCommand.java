@@ -5,7 +5,8 @@ public enum NameOfCommand {
     START("/start"),
     STOP ("/stop"),
     HELP("/help"),
-    ADD("/addNewCategory");
+    NOT(""),
+    ADD("/addcategory");
 
 
     private final String nameOfCommand;
