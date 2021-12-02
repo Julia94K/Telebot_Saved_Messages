@@ -14,8 +14,12 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+
+import static com.teleBot.springboot.commands.NameOfCommand.NOT;
+
 @Component
 public class MyTeleBot extends TelegramLongPollingBot {
+
 
     @Value("${bot.username}")
     private String username;
@@ -43,7 +47,8 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 System.out.println("command detected");
             } // negative case - we answer that this command is unknown
             else {
-                commandList.processWrongMessages(UnknownCommand.UNKNOWN_COMMAND).executeCommand(update);
+//                commandList.processWrongMessages(UnknownCommand.UNKNOWN_COMMAND).executeCommand(update);
+                commandList.processWrongMessages(NOT.getNameOfCommand()).executeCommand(update);
             }
         }
     }
