@@ -1,13 +1,19 @@
 package com.teleBot.springboot.bot;
 
 import com.teleBot.springboot.commands.CommandList;
+import com.teleBot.springboot.commands.StartCommand;
+import com.teleBot.springboot.commands.UnknownCommand;
+import com.teleBot.springboot.functions.SendMessageFunction;
 import com.teleBot.springboot.functions.SendMessageInterface;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+@Component
 public class MyTeleBot extends TelegramLongPollingBot {
 
     @Value("${bot.username}")
@@ -18,40 +24,38 @@ public class MyTeleBot extends TelegramLongPollingBot {
 
     private final CommandList commandList;
 
-    //тут какая-то ерунда исправить
-
     public MyTeleBot() {
+        this.commandList = new CommandList(new SendMessageFunction(this));
 
-        this.commandList = new CommandList(new SendMessageInterface() {
-            @Override
-            public void sendMessage(String chatId, String message) {
-
-            }
-        });
     }
 
 
     @Override
-    public void onUpdateReceived(Update update){
+    public void onUpdateReceived(Update update) {
         System.out.println("!!!");
-        if(update.hasMessage()&&update.getMessage().hasText()){
-            String message = update.getMessage().getText();
-            if(message.startsWith("/")){
-                commandList.
-            }
+        if (update.hasMessage() && update.getMessage().hasText()) {
+            String message = update.getMessage().getText().trim();
+            //positive case - we answer with one of existing commands
+            if (message.startsWith("/")) {
+                String thisCommand = message.split(" ")[0].toLowerCase();
+                commandList.processWrongMessages(thisCommand).executeCommand(update);
+                System.out.println("command detected");
+            } // negative case - we answer that this command does not exist
             else {
-                commandList.processWrongMessages().executeCommand(update);
+//                commandList.processWrongMessages(StartCommand.START_MSG).executeCommand(update);
+                commandList.processWrongMessages(UnknownCommand.UNKNOWN_COMMAND).executeCommand(update);
             }
         }
     }
 
+
     @Override
-    public String getBotUsername(){
+    public String getBotUsername() {
         return username;
     }
 
     @Override
-    public String getBotToken(){
+    public String getBotToken() {
         return token;
     }
 }
