@@ -6,7 +6,9 @@ public enum NameOfCommand {
     STOP ("/stop"),
     HELP("/help"),
     NOT(""),
-    ADD("/addcategory");
+    ADD("/addcategory"),
+    STAT("/getstat"),
+    GET("/getcategories");
 
 
     private final String nameOfCommand;
