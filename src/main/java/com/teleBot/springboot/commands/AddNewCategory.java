@@ -29,10 +29,11 @@ public class AddNewCategory implements Command {
         String text = in.next();
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),text);
         //сохранение. Как сделать чтобы в поле категория сохранялся верное значение, которое ввел пользователь
-        Category category = new Category();
-        category.setCategoryId(update.getUpdateId().toString());
-        category.setCategoryName(update.getMessage().getText());
-        categoryInterface.save(category);
+//        Category category = new Category();
+//        category.setCategoryId(update.getUpdateId().toString());
+//        category.setCategoryName(update.getMessage().getText());
+//        categoryInterface.save(category);
+
 
 //        System.out.println("New catgory"+text+"was saved!");
 //        Category category = new Category();

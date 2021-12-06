@@ -10,7 +10,7 @@ import java.util.List;
 public class GetCategoriesCommand implements Command{
     private final SendMessageInterface sendMessageInterface;
     private final CategoryInterface categoryInterface;
-    public final static String INFO_CATEGORIES = "List of categories";
+    public final static String INFO_CATEGORIES = "List of categories:";
 
     public GetCategoriesCommand(SendMessageInterface sendMessageInterface, CategoryInterface categoryInterface) {
         this.sendMessageInterface = sendMessageInterface;
@@ -21,6 +21,7 @@ public class GetCategoriesCommand implements Command{
 
     public void executeCommand(Update update){
         List<Category> categories = categoryInterface.getAllCategories();
+        sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),INFO_CATEGORIES);
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),categories.toString());
 
     }

@@ -2,6 +2,7 @@ package com.teleBot.springboot.bot;
 
 import com.teleBot.springboot.commands.CommandList;
 import com.teleBot.springboot.functions.CategoryFunction;
+import com.teleBot.springboot.functions.NoteFunction;
 import com.teleBot.springboot.functions.SendMessageFunction;
 import com.teleBot.springboot.functions.TgUserInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,8 @@ public class MyTeleBot extends TelegramLongPollingBot {
     private final CommandList commandList;
 
     @Autowired
-    public MyTeleBot(CategoryFunction addCategoryFunction, TgUserInterface tgUserInterface) {
-        this.commandList = new CommandList(new SendMessageFunction(this),addCategoryFunction,tgUserInterface);
+    public MyTeleBot(CategoryFunction addCategoryFunction, TgUserInterface tgUserInterface, NoteFunction noteFunction) {
+        this.commandList = new CommandList(new SendMessageFunction(this),addCategoryFunction,tgUserInterface,noteFunction);
 
     }
 //was

@@ -4,6 +4,7 @@ import com.teleBot.springboot.repository.entity.CategoriesRepository;
 import com.teleBot.springboot.repository.entity.Category;
 import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -33,11 +34,13 @@ public class CategoryFunction implements CategoryInterface {
         categoriesRepository.save(category);
     }
 
-    //получение из БД списка всех категорий
+    //получение из БД списка всех категорий. Переписать этот метод так, чтобы он возвращал только имена категорий
+    //step 2: имена категорий возвращаются в виде кликабельных кнопок
 
     @Override
     public List<Category>getAllCategories(){
         return categoriesRepository.findAll();
+
     }
 
 
