@@ -13,8 +13,8 @@ import javax.persistence.Table;
 public class Note {
     //chat_id - связь с таблицей telegram_user
     @Id
-    @Column(name = "chat_id")
-    private String chatId;
+    @Column(name = "update_id")
+    private Integer updateId;
 
     //значение категории (связь с таблицей category)
     @Column(name = "note_category")
@@ -27,12 +27,12 @@ public class Note {
     @Column(name="note_text")
     private String noteText;
 
-    public String getChatId() {
-        return chatId;
+    public Integer getUpdateId() {
+        return updateId;
     }
 
-    public void setChatId(String chatId) {
-        this.chatId = chatId;
+    public void setUpdateId(Integer chatId) {
+        this.updateId = chatId;
     }
 
     public String getCategoryName() {

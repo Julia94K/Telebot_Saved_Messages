@@ -26,22 +26,33 @@ public class SaveNoteCommand implements Command{
 
     @Override
     public void executeCommand(Update update){
+
         //step 1: TG bot sends message "Please enter category name"
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),ADD_CATEGORY);
-        //step 2: User type in category name
-        Scanner in = new Scanner(System.in);
-        String text = in.next(update.getMessage().getText());
         Note note = new Note();
+        String text = update.getMessage().getText();
+//        String chatId = update.getMessage().getChatId().toString();
+        Integer updateId = update.getUpdateId();
         note.setCategoryName(text);
-        sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),NOTE_MSG);
-        String chatId = update.getMessage().getChatId().toString();
-        Scanner sc = new Scanner(System.in);
-        String text2 = sc.next(update.getMessage().getText());
-        note.setNoteText(text2);
-        note.setNoteName(text2);
-        note.setChatId(chatId);
+        note.setNoteName(text);
+        note.setUpdateId(updateId);
+        note.setNoteText(text);
         noteInterface.save(note);
-        sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),NOTE_ADDED);
+
+        //step 2: User type in category name
+//        Scanner in = new Scanner(System.in);
+//        String text = in.next(update.getMessage().getText());
+//        Note note = new Note();
+//        note.setCategoryName(text);
+//        sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),NOTE_MSG);
+//        String chatId = update.getMessage().getChatId().toString();
+//        Scanner sc = new Scanner(System.in);
+//        String text2 = sc.next(update.getMessage().getText());
+//        note.setNoteText(text2);
+//        note.setNoteName(text2);
+//        note.setChatId(chatId);
+//        noteInterface.save(note);
+//        sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),NOTE_ADDED);
 
 
 
