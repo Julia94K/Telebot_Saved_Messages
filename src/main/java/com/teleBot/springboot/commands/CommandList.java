@@ -22,7 +22,7 @@ public class CommandList {
 
         commandMap.put(START.getNameOfCommand(),new StartCommand(sendMessageInterface,tgUserInterface));
         commandMap.put(STOP.getNameOfCommand(),new StopCommand(sendMessageInterface,tgUserInterface));
-        commandMap.put(ADD.getNameOfCommand(),new AddNewCategory(sendMessageInterface, categoryInterface));
+//        commandMap.put(ADD.getNameOfCommand(),new AddNewCategory(sendMessageInterface, categoryInterface));
         commandMap.put(HELP.getNameOfCommand(),new HelpCommand(sendMessageInterface,tgUserInterface));
         commandMap.put(NOT.getNameOfCommand(),new NotACommand(sendMessageInterface));
         commandMap.put(STAT.getNameOfCommand(),new StatisticCommand(sendMessageInterface,tgUserInterface));

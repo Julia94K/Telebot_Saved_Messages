@@ -5,8 +5,6 @@ import com.teleBot.springboot.functions.SendMessageInterface;
 import com.teleBot.springboot.repository.entity.Category;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.util.Scanner;
-
 public class AddNewCategory implements Command {
     public static final String ADD_MSG = "You can add new category!";
     private final SendMessageInterface sendMessageInterface;
@@ -24,11 +22,13 @@ public class AddNewCategory implements Command {
 
     @Override
     public void executeCommand(Update update){
-        String chatId = update.getMessage().getChatId().toString();
-        Category category = new Category();
-        category.setCategoryId(chatId);
-        category.setCategoryName(chatId);
-        categoryInterface.save(category);
+//        Integer chatId = update.getMessage().getChatId();
+//        String c = update.getMessage().getText();
+//        Category category = new Category();
+//        category.setUpdateId(chatId);
+//        category.setCategoryName(c);
+//        categoryInterface.save(category);
+//        sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),"Saved!");
 
 //        category.setCategoryName(update.getMessage().getText());
 //        categoryInterface.save(category);

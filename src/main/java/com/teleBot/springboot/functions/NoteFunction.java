@@ -22,7 +22,11 @@ public class NoteFunction implements NoteInterface{
     }
 
     @Override
-    public List<Note>findByCategoryName(String categoryName ){
+//        public List<Note>findByCategoryName(){
+//        return noteRepository.findAllByCategoryName();
+//
+//    }
+    public List<Note>findByCategoryName(String categoryName){
         return noteRepository.findAllByCategoryName(categoryName);
 
     }

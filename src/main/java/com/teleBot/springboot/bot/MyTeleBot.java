@@ -1,10 +1,8 @@
 package com.teleBot.springboot.bot;
 
 import com.teleBot.springboot.commands.CommandList;
-import com.teleBot.springboot.functions.CategoryFunction;
-import com.teleBot.springboot.functions.NoteFunction;
-import com.teleBot.springboot.functions.SendMessageFunction;
-import com.teleBot.springboot.functions.TgUserInterface;
+import com.teleBot.springboot.functions.*;
+import com.teleBot.springboot.repository.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -25,6 +23,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
     private String token;
 
     private final CommandList commandList;
+    private Category category;
 
     @Autowired
     public MyTeleBot(CategoryFunction addCategoryFunction, TgUserInterface tgUserInterface, NoteFunction noteFunction) {
@@ -46,8 +45,9 @@ public class MyTeleBot extends TelegramLongPollingBot {
             if (message.startsWith("/")) {
                 String thisCommand = message.split(" ")[0].toLowerCase();
                 commandList.processWrongMessages(thisCommand).executeCommand(update);
-                System.out.println("command detected");
-            } // negative case - we answer that this command is unknown
+                System.out.println("command detected");}
+//            } else if (update.getMessage().getText(). -> category contains message
+                //то выдать все сообщения по этой категории
             else {
 //                commandList.processWrongMessages(UnknownCommand.UNKNOWN_COMMAND).executeCommand(update);
                 commandList.processWrongMessages(NOT.getNameOfCommand()).executeCommand(update);

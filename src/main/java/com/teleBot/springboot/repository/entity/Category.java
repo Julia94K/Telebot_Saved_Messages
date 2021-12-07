@@ -12,19 +12,19 @@ public class Category {
     @Id //говорит, что следующий аттрибут - это первичный ключ
     @GeneratedValue(strategy = GenerationType.AUTO)
 
-    @Column(name = "category_id") //имя поля таблицы ДБ
-    private String categoryId;
+    @Column(name = "update_id") //имя поля таблицы ДБ
+    private Integer updateId;
 
     @Column(name="category_name")//имя поля таблицы ДБ
     private String categoryName;
 
     //getters and setters for future work with the values
-    public String getCategoryId() {
-        return categoryId;
+    public Integer getUpdateId() {
+        return updateId;
     }
 
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
+    public void setUpdateId(Integer updateId) {
+        this.updateId = updateId;
     }
 
     public String getCategoryName() {

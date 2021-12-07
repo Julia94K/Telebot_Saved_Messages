@@ -8,4 +8,5 @@ import java.util.List;
 public interface NoteRepository extends JpaRepository <Note,String>  {
 
     List<Note>findAllByCategoryName(String categoryName);
+//    List<Note>findAllByCategoryName();
 }

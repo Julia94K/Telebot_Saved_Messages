@@ -3,6 +3,7 @@ package com.teleBot.springboot.commands;
 import com.teleBot.springboot.functions.CategoryInterface;
 import com.teleBot.springboot.functions.SendMessageInterface;
 import com.teleBot.springboot.repository.entity.Category;
+import com.teleBot.springboot.repository.entity.Note;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class SaveNewCategoryCommand implements Command{
@@ -15,14 +16,18 @@ public class SaveNewCategoryCommand implements Command{
         this.sendMessageInterface = sendMessageInterface;
     }
 
-
+//сохранение новой категории в табличку
     @Override
     public void executeCommand(Update update) {
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),SAVED_MSG);
+        String textCategory = update.getMessage().getText();
         Category category = new Category();
-        category.setCategoryId(update.getUpdateId().toString());
-        category.setCategoryName(update.getMessage().getText());
+        Integer updateId = update.getUpdateId();
+        category.setCategoryName(textCategory);
+        category.setUpdateId(updateId);
         categoryInterface.save(category);
 
     }
+
+
 }
