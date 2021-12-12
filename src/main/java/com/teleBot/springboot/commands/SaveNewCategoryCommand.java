@@ -16,7 +16,7 @@ public class SaveNewCategoryCommand implements Command{
         this.sendMessageInterface = sendMessageInterface;
     }
 
-//сохранение новой категории в табличку
+//сохранение новой категории в табличку: вызвать команду, ввести название категории
     @Override
     public void executeCommand(Update update) {
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),SAVED_MSG);

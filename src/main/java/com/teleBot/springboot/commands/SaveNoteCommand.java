@@ -33,9 +33,10 @@ public class SaveNoteCommand implements Command{
         String text = update.getMessage().getText();
 //        String chatId = update.getMessage().getChatId().toString();
         Integer updateId = update.getUpdateId();
+        Long  chatId = update.getMessage().getChatId();
         note.setCategoryName(text);
-        note.setNoteName(text);
         note.setUpdateId(updateId);
+        note.setChatId(chatId);
         note.setNoteText(text);
         noteInterface.save(note);
 

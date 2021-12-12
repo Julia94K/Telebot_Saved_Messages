@@ -8,9 +8,11 @@ public enum NameOfCommand {
     NOT(""),
 //    ADD("/addcategory"),
     STAT("/getstat"),
-    GET("/getcategories"),
+    GET_CATEGORY("/getcategories"),
     SAVE_CATEGORY("/savecategory"),
-    SAVE_NOTE("/savenote");
+    SAVE_NOTE("/savenote"),
+    GET_NOTE("/getnotes"),
+    EDU("/education");
 
 
     private final String nameOfCommand;

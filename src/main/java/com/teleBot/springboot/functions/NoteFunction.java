@@ -1,5 +1,6 @@
 package com.teleBot.springboot.functions;
 
+import com.teleBot.springboot.repository.entity.Category;
 import com.teleBot.springboot.repository.entity.Note;
 import com.teleBot.springboot.repository.entity.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,12 @@ public class NoteFunction implements NoteInterface{
     }
 
     @Override
-//        public List<Note>findByCategoryName(){
-//        return noteRepository.findAllByCategoryName();
-//
-//    }
+    public List<Note>getAllNotes(){
+        return noteRepository.findAll();
+
+    }
+
+
     public List<Note>findByCategoryName(String categoryName){
         return noteRepository.findAllByCategoryName(categoryName);
 

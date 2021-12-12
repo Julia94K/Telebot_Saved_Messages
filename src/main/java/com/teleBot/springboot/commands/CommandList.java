@@ -1,5 +1,6 @@
 package com.teleBot.springboot.commands;
 
+import com.teleBot.springboot.commands.categories.Education;
 import com.teleBot.springboot.functions.CategoryInterface;
 import com.teleBot.springboot.functions.NoteInterface;
 import com.teleBot.springboot.functions.SendMessageInterface;
@@ -26,9 +27,11 @@ public class CommandList {
         commandMap.put(HELP.getNameOfCommand(),new HelpCommand(sendMessageInterface,tgUserInterface));
         commandMap.put(NOT.getNameOfCommand(),new NotACommand(sendMessageInterface));
         commandMap.put(STAT.getNameOfCommand(),new StatisticCommand(sendMessageInterface,tgUserInterface));
-        commandMap.put(GET.getNameOfCommand(),new GetCategoriesCommand(sendMessageInterface,categoryInterface));
+        commandMap.put(GET_CATEGORY.getNameOfCommand(),new GetCategoriesCommand(sendMessageInterface,categoryInterface));
         commandMap.put(SAVE_CATEGORY.getNameOfCommand(),new SaveNewCategoryCommand(sendMessageInterface,categoryInterface));
         commandMap.put(SAVE_NOTE.getNameOfCommand(),new SaveNoteCommand(sendMessageInterface,noteInterface,categoryInterface));
+        commandMap.put(GET_NOTE.getNameOfCommand(),new GetNotesForCategoryCommand(sendMessageInterface,categoryInterface,noteInterface));
+        commandMap.put(EDU.getNameOfCommand(),new Education(sendMessageInterface,noteInterface));
 
         unknownCommand = new UnknownCommand(sendMessageInterface);
 

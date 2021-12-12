@@ -17,6 +17,8 @@ public class GetNotesForCategoryCommand implements Command{
     private final SendMessageInterface sendMessageInterface;
     private final CategoryInterface categoryInterface;
     private final NoteInterface noteInterface;
+    public final static String INFO_NOTES = "Notes in this collection:";
+
 
     public GetNotesForCategoryCommand(SendMessageInterface sendMessageInterface, CategoryInterface categoryInterface,
                                       NoteInterface noteInterface) {
@@ -27,6 +29,23 @@ public class GetNotesForCategoryCommand implements Command{
     //тут метод должен по названию категории получать список созданных к ней записей
     @Override
     public void executeCommand(Update update){
+        String message = update.getMessage().getText();
+        Long  chatId = update.getMessage().getChatId();
+        List<Note> notes = noteInterface.getAllNotes();
+        sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),INFO_NOTES);
+        //проверка, что список не пустой
+        if (!notes.isEmpty()) {
+            for (Note note : notes) {
+                //проверка, что текущий чат айди = чат айди
+                //тут еще надо проверить, что введенное название категории соответствует категории этой записи в таблице
+                // && message.equals(note.getCategoryName())
+                if(chatId.equals(note.getChatId())){
+                    sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), note.getNoteText());
+                }
+            }
+        }else sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),"There are no saved messages in this collection!");
+
+
 ////        List<Note> notes = noteInterface.findByCategoryName(update.getMessage().getText());
 //        List<Note> notes = noteInterface.findByCategoryName();
 //        sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),notes.toString());

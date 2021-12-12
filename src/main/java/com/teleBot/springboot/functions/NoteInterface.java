@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface NoteInterface {
     void save(Note note);
-    List<Note>findByCategoryName(String categoryName);
-//        List<Note>findByCategoryName();
+    List<Note> getAllNotes();
 }

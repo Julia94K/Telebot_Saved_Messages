@@ -7,6 +7,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
+//данная команда выдает список сохраненных в базе категорий
+
 public class GetCategoriesCommand implements Command{
     private final SendMessageInterface sendMessageInterface;
     private final CategoryInterface categoryInterface;
@@ -22,7 +24,11 @@ public class GetCategoriesCommand implements Command{
     public void executeCommand(Update update){
         List<Category> categories = categoryInterface.getAllCategories();
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),INFO_CATEGORIES);
-        sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),categories.toString());
+        if(!categories.isEmpty()){
+            for (Category category: categories){
+                sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),category.getCategoryName());
+            }
+        } else sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),"List of categories is empty");
 
     }
 

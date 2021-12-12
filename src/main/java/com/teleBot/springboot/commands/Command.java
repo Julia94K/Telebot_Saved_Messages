@@ -5,7 +5,5 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public interface Command {
     void executeCommand(Update update);
-    //added
-//    void saveCommand(Category category);
 
 }
