@@ -6,7 +6,6 @@ public enum NameOfCommand {
     STOP ("/stop"),
     HELP("/help"),
     NOT(""),
-//    ADD("/addcategory"),
     STAT("/getstat"),
     GET_CATEGORY("/getcategories"),
     SAVE_CATEGORY("/savecategory"),
