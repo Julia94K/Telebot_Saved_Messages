@@ -14,8 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
-
-import static com.teleBot.springboot.commands.NameOfCommand.NOT;
+import static com.teleBot.springboot.commands.NameOfCommand.*;
 
 @Component
 public class MyTeleBot extends TelegramLongPollingBot {
@@ -31,6 +30,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
     //++
     private final TgUser tgUser;
     private final UserMessage userMessage;
+    private final String PREFIX ="/";
 
     @Autowired
     public MyTeleBot(CategoryFunction addCategoryFunction, TgUserInterface tgUserInterface, NoteFunction noteFunction) {
@@ -67,16 +67,15 @@ public class MyTeleBot extends TelegramLongPollingBot {
 
             //positive case - we answer with one of existing commands (if exists)
             //обработка команд
-            if (message.startsWith("/")) {
+            if (message.startsWith(PREFIX)) {
                 String thisCommand = message.split(" ")[0].toLowerCase();
                 commandList.processWrongMessages(thisCommand).executeCommand(update);
-                tgUser.setActive(true);
-                System.out.println("command detected");}
-
-            //++
-
+                System.out.println("command detected");
+                if(update.getMessage().getText().equals("/savecategory")){
+                    tgUser.setActive(true);
+                }
+            }
             //обработка простых сообщений от пользователя (когда ожидается ввод)
-//
             else if (tgUser.isActive()){
                 //TODO выполнить действие - дописать
                 userMessage.proceedSimpleMessage(update);
