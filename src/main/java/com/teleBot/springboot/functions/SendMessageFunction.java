@@ -3,11 +3,14 @@ package com.teleBot.springboot.functions;
 import com.teleBot.springboot.bot.MyTeleBot;
 import com.teleBot.springboot.repository.entity.TgUser;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class SendMessageFunction implements SendMessageInterface {
@@ -24,6 +27,18 @@ public class SendMessageFunction implements SendMessageInterface {
         SendMessage sm = new SendMessage();
         sm.setChatId(chatId);
         sm.setText(message);
+
+
+//        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+//        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+//        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+//        rowInline.add(InlineKeyboardButton.builder().text("Collections").callbackData("Collections_test").build());
+////        rowInline.add(new InlineKeyboardButton().setText("Button").setCallbackData("botton_text"));
+//        rowsInline.add(rowInline);
+//        inlineKeyboardMarkup.setKeyboard(rowsInline);
+//
+//        message.setReplyMarkup(inlineKeyboardMarkup);
+
 //        sm.setReplyMarkup(replyKeyboardMarkup);
         //обработка исключений
         try {

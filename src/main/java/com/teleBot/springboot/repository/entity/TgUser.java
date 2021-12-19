@@ -19,6 +19,11 @@ public class TgUser {
     @Column (name = "is_active")
     private boolean active;
 
+    @Column (name = "user_status")
+    private Integer userStatus;
+
+    //+++
+
     public String getChatId() {
         return chatId;
     }

@@ -13,6 +13,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+
+import java.util.ArrayList;
 
 import static com.teleBot.springboot.commands.NameOfCommand.*;
 
@@ -31,67 +35,59 @@ public class MyTeleBot extends TelegramLongPollingBot {
     private final TgUser tgUser;
     private final UserMessage userMessage;
     private final String PREFIX ="/";
+    ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
 
     @Autowired
     public MyTeleBot(CategoryFunction addCategoryFunction, TgUserInterface tgUserInterface, NoteFunction noteFunction) {
         this.commandList = new CommandList(new SendMessageFunction(this),addCategoryFunction,tgUserInterface,noteFunction);
         //++
         this.tgUser = new TgUser();
-        this.userMessage = new UserMessage(new SendMessageFunction(this),addCategoryFunction);
+        this.userMessage = new UserMessage(new SendMessageFunction(this),addCategoryFunction,noteFunction);
 
     }
 
     Command lastCommand;
     InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
-    //класс
-//    ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-    //ввести параметр lastMessage, чтобы обрабатывать последние введенные сообщения
-
-
     @Override
     public void onUpdateReceived(Update update) {
 
         if (update.hasMessage() && update.getMessage().hasText()) {
-            //++
-            Message inMessage = update.getMessage();
-            SendMessage outMessage = new SendMessage();
-            //++
-
-
             String message = update.getMessage().getText().trim();
-
-
-
-
-
-            //positive case - we answer with one of existing commands (if exists)
+            //positive case - we answer with one of exids (if exists)sting comman
             //обработка команд
+
             if (message.startsWith(PREFIX)) {
                 String thisCommand = message.split(" ")[0].toLowerCase();
                 commandList.processWrongMessages(thisCommand).executeCommand(update);
                 System.out.println("command detected");
                 if(update.getMessage().getText().equals("/savecategory")){
                     tgUser.setActive(true);
+                    tgUser.setUserStatus(0);
+                }
+                if(update.getMessage().getText().equals("/savenote")){
+                    tgUser.setActive(true);
+                    tgUser.setUserStatus(1);
                 }
             }
             //обработка простых сообщений от пользователя (когда ожидается ввод)
-            else if (tgUser.isActive()){
-                //TODO выполнить действие - дописать
+            else if (tgUser.isActive()&&tgUser.getUserStatus().equals(0)){
                 userMessage.proceedSimpleMessage(update);
                 tgUser.setActive(false);
-
-
             }
-                //то выдать все сообщения по этой категории
+            else if(tgUser.isActive()&&tgUser.getUserStatus().equals(1)){
+                userMessage.proceedNote(update);
+                tgUser.setUserStatus(2);
+//                tgUser.setActive(false);
+            }
+            else if(tgUser.isActive()&&tgUser.getUserStatus().equals(2)){
+                userMessage.saveNoteText(update);
+                tgUser.setActive(false);
+            }
             else {
                 commandList.processWrongMessages(NOT.getNameOfCommand()).executeCommand(update);
             }
         }
-        //написать метод, который будет считывать коллбэк пользователя и на основании этого коллбэка делать действие
-//        else if (update.hasCallbackQuery()){
-//            processCallbackQuery(update);
-//        }
     }
 
 
@@ -105,7 +101,27 @@ public class MyTeleBot extends TelegramLongPollingBot {
         return token;
     }
 
+    //клавиатура
     public String getMessage (String msg){
+        ArrayList<KeyboardRow> keyboard = new ArrayList<>();
+        KeyboardRow keyboardFirstRow = new KeyboardRow();
+        KeyboardRow keyboardSecondRow = new KeyboardRow();
+
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+
+        if(msg.equals("/start")||msg.equals("help")){
+            keyboard.clear();
+            keyboardFirstRow.clear();
+            keyboardFirstRow.add("Collections");
+            keyboardFirstRow.add("Create Note");
+            keyboardSecondRow.add("Help");
+            keyboard.add(keyboardFirstRow);
+            keyboard.add(keyboardSecondRow);
+            replyKeyboardMarkup.setKeyboard(keyboard);
+            return "Выбрать";
+        }
 
 
         return "Press /help in case of Problems";

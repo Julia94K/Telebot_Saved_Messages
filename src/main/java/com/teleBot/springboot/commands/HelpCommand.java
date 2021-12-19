@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class HelpCommand implements Command{
     public static final String HELP_MSG = "Following commands are supported: /start, /stop, /help, " +
-            "/getcategories, /savenote, /getnotes";
+            "/savecategory,/getcategories, /savenote, /getnotes";
     public static final String ERROR_MSG = "User is not active";
     private final SendMessageInterface sendMessageInterface;
     private final TgUserInterface tgUserInterface;

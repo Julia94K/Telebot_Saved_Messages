@@ -6,13 +6,20 @@ import com.teleBot.springboot.functions.SendMessageInterface;
 import com.teleBot.springboot.repository.entity.Note;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
+import javax.swing.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class SaveNoteCommand implements Command{
+
+    private static InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+//    private static HashMap <Long, Integer> userStates = new HashMap<>();
+
     ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
     private final String NOTE_MSG = "Add new note!";
     private final String NOTE_ADDED = "Note was added";
@@ -40,16 +47,16 @@ public class SaveNoteCommand implements Command{
 
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), ADD_NOTE);
 
-        Note note = new Note();
-        String text = update.getMessage().getText();
-//        String chatId = update.getMessage().getChatId().toString();
-        Integer updateId = update.getUpdateId();
-        Long  chatId = update.getMessage().getChatId();
-        note.setCategoryName("Education");
-        note.setUpdateId(updateId);
-        note.setChatId(chatId);
-        note.setNoteText("https://spring.io/guides#topical-guides");
-        noteInterface.save(note);
+//        Note note = new Note();
+//        String text = update.getMessage().getText();
+////        String chatId = update.getMessage().getChatId().toString();
+//        Integer updateId = update.getUpdateId();
+//        Long  chatId = update.getMessage().getChatId();
+//        note.setCategoryName("Education");
+//        note.setUpdateId(updateId);
+//        note.setChatId(chatId);
+//        note.setNoteText("https://spring.io/guides#topical-guides");
+//        noteInterface.save(note);
 
     }
 
