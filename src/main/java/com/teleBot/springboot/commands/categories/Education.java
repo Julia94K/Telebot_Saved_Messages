@@ -21,6 +21,7 @@ public class Education implements Command {
 
     @Override
     public void executeCommand(Update update){
+//        sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),"Please choose your category");
         List <Note> notes = noteInterface.getAllNotes();
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),EDU_MSG);
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),notes.toString());

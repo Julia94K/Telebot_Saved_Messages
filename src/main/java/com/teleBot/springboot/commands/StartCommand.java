@@ -3,6 +3,7 @@ package com.teleBot.springboot.commands;
 import com.teleBot.springboot.functions.SendMessageInterface;
 import com.teleBot.springboot.functions.TgUserInterface;
 import com.teleBot.springboot.repository.entity.TgUser;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -26,52 +27,26 @@ public class StartCommand implements Command {
     @Override
     public void executeCommand(Update update) {
         String chatId = update.getMessage().getChatId().toString();
+//        long chat_id = update.getMessage().getChatId();
+//        SendMessage message1 = new SendMessage().setChatId(chat_id).setText("Keyboard");
+//        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+//        List<KeyboardRow>keyboard = new ArrayList<>();
+//        KeyboardRow row = new KeyboardRow();
+//        row.add("Row 1 Button 1");
+//        row.add("Row 1 Button 2");
+//        row.add("Row 1 Button 3");
+//        keyboard.add(row);
+//        row = new KeyboardRow();
+//        row.add("Row 2 Button 1");
+//        row.add("Row 2 Button 2");
+//        row.add("Row 2 Button 3");
+//        keyboard.add(row);
+//        keyboardMarkup.setKeyboard(keyboard);
+//
+//        message1.setReplyMarkup(keyboardMarkup);
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), START_MSG);
-//        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-//        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
-//        List<InlineKeyboardButton> rowInline = new ArrayList<>();
-//        rowInline.add(InlineKeyboardButton.builder().text("Collections").callbackData("Collections_test").build());
-//        rowsInline.add(rowInline);
-//        inlineKeyboardMarkup.setKeyboard(rowsInline);
-//
 
-        //проверяем, есть ли пользователь в базе активных пользователей, если нет, то нужно сделать его активным
-//        tgUserInterface.findUserByChatId(chatId).ifPresentOrElse(tgUser -> {
-//            tgUser.setActive(true);
-//            tgUserInterface.save(tgUser);
-//        }, () -> {
-//            TgUser tgUser = new TgUser();
-//            tgUser.setActive(true);
-//            tgUser.setChatId(chatId);
-//            tgUserInterface.save(tgUser);
-//
-//        });
 
-//
-
-//
-//
-//
-//
-//
-//
-//
-//        ArrayList<KeyboardRow> keyboard = new ArrayList<>();
-//        KeyboardRow keyboardFirstRow = new KeyboardRow();
-//        KeyboardRow keyboardSecondRow = new KeyboardRow();
-//
-//        replyKeyboardMarkup.setSelective(true);
-//        replyKeyboardMarkup.setResizeKeyboard(true);
-//        replyKeyboardMarkup.setOneTimeKeyboard(false);
-//
-//        keyboard.clear();
-//        keyboardFirstRow.clear();
-//        keyboardFirstRow.add("Collections");
-//        keyboardFirstRow.add("Create Note");
-//        keyboardSecondRow.add("Help");
-//        keyboard.add(keyboardFirstRow);
-//        keyboard.add(keyboardSecondRow);
-//        replyKeyboardMarkup.setKeyboard(keyboard);
 
     }
 }

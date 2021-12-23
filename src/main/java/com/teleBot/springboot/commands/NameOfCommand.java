@@ -4,7 +4,8 @@ public enum NameOfCommand {
 
     START("/start"),
     STOP ("/stop"),
-    HELP("/help"),
+//    HELP("/help"),
+    HELP("Help"),
     NOT(""),
     STAT("/getstat"),
     GET_CATEGORY("/getcategories"),
@@ -12,6 +13,7 @@ public enum NameOfCommand {
     SAVE_NOTE("/savenote"),
     GET_NOTE("/getnotes"),
     EDU("/education");
+
 
 
     private final String nameOfCommand;

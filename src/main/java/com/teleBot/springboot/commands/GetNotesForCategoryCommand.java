@@ -43,7 +43,8 @@ public class GetNotesForCategoryCommand implements Command{
                     sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), note.getNoteText());
                 }
             }
-        }else sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),"There are no saved messages in this collection!");
+        }else sendMessageInterface.sendMessage(update.getMessage().getChatId().toString()
+                ,"There are no saved messages in this collection!");
 
 
 ////        List<Note> notes = noteInterface.findByCategoryName(update.getMessage().getText());

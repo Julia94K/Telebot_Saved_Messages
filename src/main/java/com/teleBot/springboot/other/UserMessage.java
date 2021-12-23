@@ -44,6 +44,8 @@ public class UserMessage implements User {
     }
 
     @Override
+
+    //сохранение категории в БД
     public void proceedSimpleMessage(Update update) {
 
         String text = update.getMessage().getText();
@@ -57,10 +59,13 @@ public class UserMessage implements User {
 
     }
 
+    //сохранение заметки в БД ч1
+
     public void proceedNote(Update update) {
         String text = update.getMessage().getText();
         Long chatId = update.getMessage().getChatId();
         Note note = new Note();
+        //проверить нет ли уже записи с чат айди вместо текста. Если есть, то удалить
         Integer updateId = update.getUpdateId();
         note.setCategoryName(text);
         note.setUpdateId(updateId);
@@ -73,9 +78,13 @@ public class UserMessage implements User {
 
     }
 
+    //сохранение заметки в БД ч2
+    //TODO нужно полностью обнулять запись без текста, если пользователь выбрал любую другую команду
+    //можно через кнопку отмена или просто затирать принудительно созданную запись
+
     public void saveNoteText(Update update) {
         String text = update.getMessage().getText();
-        //нужно найти строчку, в которой текст = To be filled
+        //нужно найти строчку, в которой текст = chatId
         //тут лучше try catch
         String chatId = update.getMessage().getChatId().toString();
         List<Note> notes = noteInterface.getAllNotes();
