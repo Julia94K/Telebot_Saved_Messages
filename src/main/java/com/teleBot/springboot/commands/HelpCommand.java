@@ -6,8 +6,17 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
 public class HelpCommand implements Command{
-    public static final String HELP_MSG = "Following commands are supported: /start, /stop, /help, " +
-            "/savecategory,/getcategories, /savenote, /getnotes";
+    public static final String HELP_MSG = "✨Дотупные команды✨" +
+            "\n" +
+            "/savecategory"+
+            "\n"+
+            "/getcategories"+
+            "\n"+
+            "/savenote"+
+            "\n"+
+            "/getnotes"+
+            "\n"+
+            "/help";
 //    public static final String ERROR_MSG = "User is not active";
     private final SendMessageInterface sendMessageInterface;
 
@@ -24,17 +33,7 @@ public class HelpCommand implements Command{
     @Override
     public void executeCommand(Update update) {
         String chatId = update.getMessage().getChatId().toString();
-
-//        if (tgUserInterface.findUserByChatId(chatId).isPresent()) {
             sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), HELP_MSG);
-
-
-//        } else {
-//            sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),ERROR_MSG);
-//        }
-//        if(){} если пользователь есть в листе активных пользователей, то отправить ему в ответ сообщение
-//        со списко команд
-//        элс вывести пользователю сообщение о неактивном боте
 
 
         }

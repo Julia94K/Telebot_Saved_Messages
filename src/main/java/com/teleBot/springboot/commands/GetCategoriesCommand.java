@@ -38,15 +38,7 @@ public class GetCategoriesCommand implements Command{
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),INFO_CATEGORIES);
         if(!categories.isEmpty()){
             for (Category category: categories){
-//                InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-//                InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
                 sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),category.getCategoryName());
-//                inlineKeyboardButton.setText(category.getCategoryName());
-//                inlineKeyboardButton.setCallbackData("Button pressed");
-//                List<InlineKeyboardButton>keybordButtonRow1 = new ArrayList<>();
-//                keybordButtonRow1.add(inlineKeyboardButton);
-
-
             }
         } else sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),"List of categories is empty");
 

@@ -79,16 +79,19 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
                 InlineKeyboardButton inlineKeyboardButton4 = new InlineKeyboardButton();
                 InlineKeyboardButton inlineKeyboardButton5 = new InlineKeyboardButton();
+                InlineKeyboardButton inlineKeyboardButton6 = new InlineKeyboardButton();
                 inlineKeyboardButton1.setText("Education");
                 inlineKeyboardButton2.setText("Travel");
                 inlineKeyboardButton3.setText("Work");
                 inlineKeyboardButton4.setText("Shopping");
                 inlineKeyboardButton5.setText("Restaurants");
+                inlineKeyboardButton6.setText("Movies");
                 inlineKeyboardButton1.setCallbackData("Button \"Education\" has been pressed");
                 inlineKeyboardButton2.setCallbackData("Button \"Travel\" has been pressed");
                 inlineKeyboardButton3.setCallbackData("Button \"Work\" has been pressed");
                 inlineKeyboardButton4.setCallbackData("Button \"Shopping\" has been pressed");
                 inlineKeyboardButton5.setCallbackData("Button \"Restaurants\" has been pressed");
+                inlineKeyboardButton6.setCallbackData("Button \"Movies\" has been pressed");
                 List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
                 List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
                 keyboardButtonsRow1.add(inlineKeyboardButton1);
@@ -96,6 +99,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 keyboardButtonsRow1.add(inlineKeyboardButton3);
                 keyboardButtonsRow2.add(inlineKeyboardButton4);
                 keyboardButtonsRow2.add(inlineKeyboardButton5);
+                keyboardButtonsRow2.add(inlineKeyboardButton6);
                 List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
                 rowList.add(keyboardButtonsRow1);
                 rowList.add(keyboardButtonsRow2);
@@ -139,7 +143,15 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 sm.setChatId(update.getMessage().getChatId().toString());
                 String helpMsg = "✨Дотупные команды✨" +
                         "\n" +
-                        "/createcollection, /createnote, /getcategory, /getnotes";
+                        "/savecategory"+
+                        "\n"+
+                        "/getcategories"+
+                        "\n"+
+                        "/savenote"+
+                        "\n"+
+                        "/getnotes"+
+                        "\n"+
+                        "/help";
                 sm.setText(helpMsg);
                 List<KeyboardRow> keyboard = new ArrayList<>();
 
@@ -201,10 +213,17 @@ public class MyTeleBot extends TelegramLongPollingBot {
             }
             else {
                 //по идее не имеет смысла проверять, команда или нет. Бот должен уметь работать как с командами, так и с обычными сообщениями
-                commandList.processWrongMessages(NOT.getNameOfCommand()).executeCommand(update);
+//                commandList.processWrongMessages(NOT.getNameOfCommand()).executeCommand(update);
+                //default keyboard + help with commands
+                //TODO method for default keyboard
+                commandList.processWrongMessages(HELP.getNameOfCommand()).executeCommand(update);
+
+
             }
         }
     }
+
+    //TODO method for callbackData - if the user pressed the inlinekeyboard button
 
 
 

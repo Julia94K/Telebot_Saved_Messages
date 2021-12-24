@@ -4,10 +4,8 @@ public enum NameOfCommand {
 
     START("/start"),
     STOP ("/stop"),
-//    HELP("/help"),
-    HELP("Help"),
+    HELP("/help"),
     NOT(""),
-    STAT("/getstat"),
     GET_CATEGORY("/getcategories"),
     SAVE_CATEGORY("/savecategory"),
     SAVE_NOTE("/savenote"),

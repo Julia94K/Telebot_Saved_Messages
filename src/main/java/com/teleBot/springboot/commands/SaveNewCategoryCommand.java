@@ -25,21 +25,7 @@ public class SaveNewCategoryCommand implements Command{
     public void executeCommand(Update update) {
         //бот просит пользователя ввести название коллекции
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),ADD);
-
-        //пользователь вводит название коллекции, которую хочет сохранить
-//        Scanner scanner = new Scanner(MyTeleBot.in)
-//        Scanner sc = new Scanner(System.in);
-//        String category = sc.next();
-////        executeCommand(update.getMessage().getChatId().toString(),);
-
-//        String textCategory = update.getMessage().getText();
-//
-//        Category category = new Category();
-//        Integer updateId = update.getUpdateId();
-//        category.setCategoryName(textCategory);
-//        category.setUpdateId(updateId);
-//        categoryInterface.save(category);
-//        sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),SAVED_MSG);
+        //обработка команды происходит в классе UserMessage
 
     }
 

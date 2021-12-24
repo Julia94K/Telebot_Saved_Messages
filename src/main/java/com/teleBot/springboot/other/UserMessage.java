@@ -27,7 +27,6 @@ public class UserMessage implements User {
     //клавиатура
     //обработка нажатий пользователя на клавиатуру
 
-    Integer update_id;
 
 
     private final SendMessageInterface sendMessageInterface;
@@ -85,14 +84,13 @@ public class UserMessage implements User {
     public void saveNoteText(Update update) {
         String text = update.getMessage().getText();
         //нужно найти строчку, в которой текст = chatId
-        //тут лучше try catch
+        //try catch?
         String chatId = update.getMessage().getChatId().toString();
         List<Note> notes = noteInterface.getAllNotes();
         for (Note note : notes) {
             if (note.getNoteText().equals(chatId)) {
                 note.setNoteText(text);
                 noteInterface.save(note);
-//            } else sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),"error");
 
             }
         }

@@ -5,6 +5,8 @@ import com.teleBot.springboot.functions.TgUserInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+//not needed
+
 public class StatisticCommand implements Command{
 
     private final TgUserInterface tgUserInterface;
