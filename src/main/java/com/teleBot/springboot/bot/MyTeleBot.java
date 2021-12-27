@@ -5,6 +5,7 @@ import com.teleBot.springboot.commands.CommandList;
 import com.teleBot.springboot.functions.*;
 import com.teleBot.springboot.other.UserMessage;
 import com.teleBot.springboot.repository.entity.Category;
+import com.teleBot.springboot.repository.entity.Note;
 import com.teleBot.springboot.repository.entity.TgUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,18 +40,22 @@ public class MyTeleBot extends TelegramLongPollingBot {
     private final TgUser tgUser;
     private final UserMessage userMessage;
     private final Category category;
-    private final String PREFIX ="/";
+    private final Note note;
+    private final String PREFIX = "/";
     ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
     SendMessageFunction sendMessageFunction;
+    private final CategoryInterface categoryInterface;
 
 
     @Autowired
-    public MyTeleBot(CategoryFunction addCategoryFunction, TgUserInterface tgUserInterface, NoteFunction noteFunction) {
-        this.commandList = new CommandList(new SendMessageFunction(this),addCategoryFunction,tgUserInterface,noteFunction);
+    public MyTeleBot(CategoryFunction addCategoryFunction, TgUserInterface tgUserInterface, NoteFunction noteFunction, CategoryInterface categoryInterface) {
+        this.commandList = new CommandList(new SendMessageFunction(this), addCategoryFunction, tgUserInterface, noteFunction);
         //++
         this.tgUser = new TgUser();
-        this.userMessage = new UserMessage(new SendMessageFunction(this),addCategoryFunction,noteFunction);
+        this.userMessage = new UserMessage(new SendMessageFunction(this), addCategoryFunction, noteFunction);
         this.category = new Category();
+        this.note = new Note();
+        this.categoryInterface = categoryInterface;
 
 
     }
@@ -70,10 +75,11 @@ public class MyTeleBot extends TelegramLongPollingBot {
 
         if (update.hasMessage() && update.getMessage().hasText()) {
             String message = update.getMessage().getText().trim();
-            if(message.equals("/getcategories")||message.equals("Collections")){
+            if (message.equals("/getcategories") || message.equals("Collections")) {
                 SendMessage sm = new SendMessage();
                 sm.setChatId(update.getMessage().getChatId().toString());
-                sm.setText(message);
+                sm.setText("\uD83E\uDDA9 Chose one of the collections or select a command bellow: \uD83E\uDDA9");
+                //++
                 InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
                 InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
                 InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
@@ -105,6 +111,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 rowList.add(keyboardButtonsRow2);
                 inlineKeyboardMarkup.setKeyboard(rowList);
                 sm.setReplyMarkup(inlineKeyboardMarkup);
+
                 try {
                     execute(sm);
                 } catch (TelegramApiException e) {
@@ -112,7 +119,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 }
 
             }
-            if(message.equals("/start")) {
+            if (message.equals("/start")) {
                 System.out.println(message);
                 SendMessage sm = new SendMessage();
                 sm.setChatId(update.getMessage().getChatId().toString());
@@ -137,22 +144,11 @@ public class MyTeleBot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
-            if(message.equals("Help")) {
+            if (message.equals("Help")) {
                 System.out.println(message);
                 SendMessage sm = new SendMessage();
                 sm.setChatId(update.getMessage().getChatId().toString());
-                String helpMsg = "✨Дотупные команды✨" +
-                        "\n" +
-                        "/savecategory"+
-                        "\n"+
-                        "/getcategories"+
-                        "\n"+
-                        "/savenote"+
-                        "\n"+
-                        "/getnotes"+
-                        "\n"+
-                        "/help";
-                sm.setText(helpMsg);
+                sm.setText(message);
                 List<KeyboardRow> keyboard = new ArrayList<>();
 
                 KeyboardRow row = new KeyboardRow();
@@ -176,41 +172,52 @@ public class MyTeleBot extends TelegramLongPollingBot {
             //обработка команд
 
             if (message.startsWith(PREFIX)) {
-                if(tgUser.isActive()){
+                if (tgUser.isActive()) {
                     tgUser.setActive(false);
                 }
                 String thisCommand = message.split(" ")[0].toLowerCase();
                 commandList.processWrongMessages(thisCommand).executeCommand(update);
                 System.out.println("command detected");
-                if(update.getMessage().getText().equals("/savecategory")){
+                if (update.getMessage().getText().equals("/savecategory")) {
 
                     tgUser.setActive(true);
                     tgUser.setUserStatus(0);
 
                 }
-                if(update.getMessage().getText().equals("/savenote")){
+                if (update.getMessage().getText().equals("/savenote")) {
                     tgUser.setActive(true);
                     tgUser.setUserStatus(1);
                 }
             }
 
 
-
-
             //обработка простых сообщений от пользователя (когда ожидается ввод)
-            else if (tgUser.isActive()&&tgUser.getUserStatus().equals(0)){
+            else if (tgUser.isActive() && tgUser.getUserStatus().equals(0)) {
                 userMessage.proceedSimpleMessage(update);
                 tgUser.setActive(false);
-            }
-            else if(tgUser.isActive()&&tgUser.getUserStatus().equals(1)){
+            } else if (tgUser.isActive() && tgUser.getUserStatus().equals(1)) {
                 userMessage.proceedNote(update);
                 tgUser.setUserStatus(2);
 //                tgUser.setActive(false);
-            }
-            else if(tgUser.isActive()&&tgUser.getUserStatus().equals(2)){
+            } else if (tgUser.isActive() && tgUser.getUserStatus().equals(2)) {
                 userMessage.saveNoteText(update);
                 tgUser.setActive(false);
             }
+            //TODO обработка по нажатию на кнопку пока не работает
+            else if (update.hasCallbackQuery()) {
+                System.out.println(update.getCallbackQuery().getData());
+                SendMessage sm = new SendMessage();
+                sm.setChatId(update.getCallbackQuery().getMessage().getChatId().toString());
+                sm.setText(update.getCallbackQuery().getData());
+                try {
+                    execute(sm);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            //++
+
             else {
                 //по идее не имеет смысла проверять, команда или нет. Бот должен уметь работать как с командами, так и с обычными сообщениями
 //                commandList.processWrongMessages(NOT.getNameOfCommand()).executeCommand(update);
@@ -225,6 +232,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
 
     //TODO method for callbackData - if the user pressed the inlinekeyboard button
 
+    //TODO класс для вызова дефолтной клавиатуры
 
 
     @Override

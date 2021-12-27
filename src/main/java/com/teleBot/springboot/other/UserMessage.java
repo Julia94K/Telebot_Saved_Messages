@@ -50,7 +50,7 @@ public class UserMessage implements User {
         String text = update.getMessage().getText();
         Category category = new Category();
         Integer updateId = update.getUpdateId();
-        category.setCategoryName("/" + text);
+        category.setCategoryName(text);
         category.setUpdateId(updateId);
         categoryInterface.save(category);
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), SAVED_MSG);

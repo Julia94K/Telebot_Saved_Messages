@@ -32,7 +32,6 @@ public class GetCategoriesCommand implements Command{
 
 
     @Override
-
     public void executeCommand(Update update){
         List<Category> categories = categoryInterface.getAllCategories();
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),INFO_CATEGORIES);
