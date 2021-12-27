@@ -79,7 +79,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 SendMessage sm = new SendMessage();
                 sm.setChatId(update.getMessage().getChatId().toString());
                 sm.setText("\uD83E\uDDA9 Chose one of the collections or select a command bellow: \uD83E\uDDA9");
-                //++
+                //keyboard
                 InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
                 InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
                 InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
