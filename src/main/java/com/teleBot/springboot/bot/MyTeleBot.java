@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -20,6 +21,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,6 +83,66 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 sm.setChatId(update.getMessage().getChatId().toString());
                 sm.setText("\uD83E\uDDA9 Chose one of the collections or select a command bellow: \uD83E\uDDA9");
                 //keyboard
+//                ++ как сделать, чтобы все кнопки подтягивались в список из базы, а не записывалось все время последнее значение
+//                InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
+//                InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
+//                InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
+//                InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
+//                InlineKeyboardButton inlineKeyboardButton4 = new InlineKeyboardButton();
+
+
+//                List<Category> categories = categoryInterface.getAllCategories();
+//                List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
+//                List<InlineKeyboardButton> keyboardButtonsRowAdditional = new ArrayList<>();
+//                keyboardButtonsRowAdditional.add(inlineKeyboardButton1);
+//                keyboardButtonsRowAdditional.add(inlineKeyboardButton2);
+//                keyboardButtonsRowAdditional.add(inlineKeyboardButton3);
+//                keyboardButtonsRowAdditional.add(inlineKeyboardButton4);
+
+
+//                List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+
+//                if (!categories.isEmpty()) {
+//                        //увеличивать порядковый номер кнопки
+//                        for (Category category:categories){
+
+//                            for (InlineKeyboardButton b: keyboardButtonsRowAdditional){
+//                                b.setText(category.getCategoryName());
+//                                b.setCallbackData("Callback");
+//                                keyboardButtonsRow.add(b);
+////                                System.out.println(b);
+//
+//                        }
+//                            for (InlineKeyboardButton but:keyboardButtonsRow){
+//                                System.out.println(but);
+//                            }
+//
+//
+//
+//
+//
+//                    }
+//
+////                    for (Category category : categories) {
+////
+////                            inlineKeyboardButton.setText(category.getCategoryName());
+////                            inlineKeyboardButton.setCallbackData("Callback");
+////                            rowList.add(keyboardButtonsRow);
+////
+////                }
+////                    keyboardButtonsRow.add(inlineKeyboardButton);
+//                    rowList.add(keyboardButtonsRow);
+//
+//                inlineKeyboardMarkup.setKeyboard(rowList);
+//                sm.setReplyMarkup(inlineKeyboardMarkup);
+
+
+
+//            }
+//                //++
+            //++
+            //commented
+//                    if (!categories.isEmpty()) {
                 InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
                 InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
                 InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
@@ -92,12 +155,12 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 inlineKeyboardButton4.setText("Shopping");
                 inlineKeyboardButton5.setText("Restaurants");
                 inlineKeyboardButton6.setText("Movies");
-                inlineKeyboardButton1.setCallbackData("Button \"Education\" has been pressed");
-                inlineKeyboardButton2.setCallbackData("Button \"Travel\" has been pressed");
-                inlineKeyboardButton3.setCallbackData("Button \"Work\" has been pressed");
-                inlineKeyboardButton4.setCallbackData("Button \"Shopping\" has been pressed");
-                inlineKeyboardButton5.setCallbackData("Button \"Restaurants\" has been pressed");
-                inlineKeyboardButton6.setCallbackData("Button \"Movies\" has been pressed");
+                inlineKeyboardButton1.setCallbackData("Create note");
+                inlineKeyboardButton2.setCallbackData("Create note");
+                inlineKeyboardButton3.setCallbackData("Create note");
+                inlineKeyboardButton4.setCallbackData("Create note");
+                inlineKeyboardButton5.setCallbackData("Create note");
+                inlineKeyboardButton6.setCallbackData("Create note");
                 List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
                 List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
                 keyboardButtonsRow1.add(inlineKeyboardButton1);
@@ -112,125 +175,146 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 inlineKeyboardMarkup.setKeyboard(rowList);
                 sm.setReplyMarkup(inlineKeyboardMarkup);
 
-                try {
-                    execute(sm);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
 
+            try {
+                execute(sm);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
             }
-            if (message.equals("/start")) {
-                System.out.println(message);
-                SendMessage sm = new SendMessage();
-                sm.setChatId(update.getMessage().getChatId().toString());
-                sm.setText(message);
+
+        }
+        if (message.equals("/start")) {
+            System.out.println(message);
+            SendMessage sm = new SendMessage();
+            sm.setChatId(update.getMessage().getChatId().toString());
+            sm.setText(message);
 //        sm.setText(getMessage(message));
-                List<KeyboardRow> keyboard = new ArrayList<>();
+            List<KeyboardRow> keyboard = new ArrayList<>();
 
-                KeyboardRow row = new KeyboardRow();
-                replyKeyboardMarkup.setSelective(true);
-                replyKeyboardMarkup.setResizeKeyboard(true);
-                replyKeyboardMarkup.setOneTimeKeyboard(true);
-                System.out.println(message);
-                row.add("Help");
-                row.add("Collections");
-                row.add("Create note");
-                keyboard.add(row);
-                replyKeyboardMarkup.setKeyboard(keyboard);
-                sm.setReplyMarkup(replyKeyboardMarkup);
-                try {
-                    execute(sm);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (message.equals("Help")) {
-                System.out.println(message);
-                SendMessage sm = new SendMessage();
-                sm.setChatId(update.getMessage().getChatId().toString());
-                sm.setText(message);
-                List<KeyboardRow> keyboard = new ArrayList<>();
-
-                KeyboardRow row = new KeyboardRow();
-                replyKeyboardMarkup.setSelective(true);
-                replyKeyboardMarkup.setResizeKeyboard(true);
-                replyKeyboardMarkup.setOneTimeKeyboard(true);
-                row.add("Collections");
-                row.add("Create note");
-                keyboard.add(row);
-                replyKeyboardMarkup.setKeyboard(keyboard);
-                sm.setReplyMarkup(replyKeyboardMarkup);
-                try {
-                    execute(sm);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
-
-
-            //positive case - we answer with one of exids (if exists)sting comman
-            //обработка команд
-
-            if (message.startsWith(PREFIX)) {
-                if (tgUser.isActive()) {
-                    tgUser.setActive(false);
-                }
-                String thisCommand = message.split(" ")[0].toLowerCase();
-                commandList.processWrongMessages(thisCommand).executeCommand(update);
-                System.out.println("command detected");
-                if (update.getMessage().getText().equals("/savecategory")) {
-
-                    tgUser.setActive(true);
-                    tgUser.setUserStatus(0);
-
-                }
-                if (update.getMessage().getText().equals("/savenote")) {
-                    tgUser.setActive(true);
-                    tgUser.setUserStatus(1);
-                }
-            }
-
-
-            //обработка простых сообщений от пользователя (когда ожидается ввод)
-            else if (tgUser.isActive() && tgUser.getUserStatus().equals(0)) {
-                userMessage.proceedSimpleMessage(update);
-                tgUser.setActive(false);
-            } else if (tgUser.isActive() && tgUser.getUserStatus().equals(1)) {
-                userMessage.proceedNote(update);
-                tgUser.setUserStatus(2);
-//                tgUser.setActive(false);
-            } else if (tgUser.isActive() && tgUser.getUserStatus().equals(2)) {
-                userMessage.saveNoteText(update);
-                tgUser.setActive(false);
-            }
-            //TODO обработка по нажатию на кнопку пока не работает
-            else if (update.hasCallbackQuery()) {
-                System.out.println(update.getCallbackQuery().getData());
-                SendMessage sm = new SendMessage();
-                sm.setChatId(update.getCallbackQuery().getMessage().getChatId().toString());
-                sm.setText(update.getCallbackQuery().getData());
-                try {
-                    execute(sm);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            //++
-
-            else {
-                //по идее не имеет смысла проверять, команда или нет. Бот должен уметь работать как с командами, так и с обычными сообщениями
-//                commandList.processWrongMessages(NOT.getNameOfCommand()).executeCommand(update);
-                //default keyboard + help with commands
-                //TODO method for default keyboard
-                commandList.processWrongMessages(HELP.getNameOfCommand()).executeCommand(update);
-
-
+            KeyboardRow row = new KeyboardRow();
+            replyKeyboardMarkup.setSelective(true);
+            replyKeyboardMarkup.setResizeKeyboard(true);
+            replyKeyboardMarkup.setOneTimeKeyboard(true);
+            System.out.println(message);
+            row.add("Help");
+            row.add("Collections");
+            row.add("Create note");
+            keyboard.add(row);
+            replyKeyboardMarkup.setKeyboard(keyboard);
+            sm.setReplyMarkup(replyKeyboardMarkup);
+            try {
+                execute(sm);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
             }
         }
-    }
+        if (message.equals("Help")) {
+            System.out.println(message);
+            SendMessage sm = new SendMessage();
+            sm.setChatId(update.getMessage().getChatId().toString());
+            sm.setText(message);
+            List<KeyboardRow> keyboard = new ArrayList<>();
 
-    //TODO method for callbackData - if the user pressed the inlinekeyboard button
+            KeyboardRow row = new KeyboardRow();
+            replyKeyboardMarkup.setSelective(true);
+            replyKeyboardMarkup.setResizeKeyboard(true);
+            replyKeyboardMarkup.setOneTimeKeyboard(true);
+            row.add("Collections");
+            row.add("Create note");
+            keyboard.add(row);
+            replyKeyboardMarkup.setKeyboard(keyboard);
+            sm.setReplyMarkup(replyKeyboardMarkup);
+            try {
+                execute(sm);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        //positive case - we answer with one of exids (if exists)sting comman
+        //обработка команд
+
+        if (message.startsWith(PREFIX)) {
+            if (tgUser.isActive()) {
+                tgUser.setActive(false);
+            }
+            String thisCommand = message.split(" ")[0].toLowerCase();
+            commandList.processWrongMessages(thisCommand).executeCommand(update);
+            System.out.println("command detected");
+            if (update.getMessage().getText().equals("/savecategory")) {
+
+                tgUser.setActive(true);
+                tgUser.setUserStatus(0);
+
+            }
+            if (update.getMessage().getText().equals("/savenote")) {
+                tgUser.setActive(true);
+                tgUser.setUserStatus(1);
+            }
+        }
+
+
+        //обработка простых сообщений от пользователя (когда ожидается ввод)
+        else if (tgUser.isActive() && tgUser.getUserStatus().equals(0)) {
+            userMessage.proceedSimpleMessage(update);
+            tgUser.setActive(false);
+        } else if (tgUser.isActive() && tgUser.getUserStatus().equals(1)) {
+            userMessage.proceedNote(update);
+            tgUser.setUserStatus(2);
+//                tgUser.setActive(false);
+        } else if (tgUser.isActive() && tgUser.getUserStatus().equals(2)) {
+            userMessage.saveNoteText(update);
+            tgUser.setActive(false);
+        }
+
+
+        else {
+            //по идее не имеет смысла проверять, команда или нет. Бот должен уметь работать как с командами, так и с обычными сообщениями
+//                commandList.processWrongMessages(NOT.getNameOfCommand()).executeCommand(update);
+            //default keyboard + help with commands
+            //TODO method for default keyboard
+            commandList.processWrongMessages(HELP.getNameOfCommand()).executeCommand(update);
+
+
+        }
+    }
+        //TODO method for callbackData - not quite ready yet
+        else if (update.hasCallbackQuery()) {
+//            String call_data = update.getCallbackQuery().getData();
+//            long message_id = update.getCallbackQuery().getMessage().getMessageId();
+//            String  chat_id = update.getCallbackQuery().getMessage().getChatId().toString();
+//            if(call_data.equals("Create note")){
+//                String answer = "Updated message text";
+//                EditMessageText new_message = new EditMessageText();
+//                new_message.setChatId(update.getMessage().getChatId().toString());
+//                new_message.setText(answer);
+//                try{
+//                    execute(new_message);
+//
+//                }catch (TelegramApiException e){
+//                    e.printStackTrace();
+//                }
+//
+//            }
+            System.out.println(update.getCallbackQuery().getData());
+            SendMessage sm = new SendMessage();
+            if(update.getCallbackQuery().getData().equals("Create note")){
+                sm.setChatId(update.getCallbackQuery().getMessage().getChatId().toString());
+                sm.setText(update.getCallbackQuery().getData());
+            }
+
+            try {
+                execute(sm);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+}
+
+
 
     //TODO класс для вызова дефолтной клавиатуры
 
