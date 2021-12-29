@@ -66,7 +66,6 @@ public class MyTeleBot extends TelegramLongPollingBot {
 
     }
 
-    Command lastCommand;
     InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
     ArrayList<KeyboardRow> keyboard = new ArrayList<KeyboardRow>();
     InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
@@ -85,67 +84,35 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 SendMessage sm = new SendMessage();
                 sm.setChatId(update.getMessage().getChatId().toString());
                 sm.setText("\uD83E\uDDA9 Chose one of the collections or select a command bellow: \uD83E\uDDA9");
-                //keyboard
-//                ++ как сделать, чтобы все кнопки подтягивались в список из базы, а не записывалось все время последнее значение
-//                InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
-//                InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
-//                InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
-//                InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
-//                InlineKeyboardButton inlineKeyboardButton4 = new InlineKeyboardButton();
 
+                //++
+                //попытка вывести коллекции в виде кнопок TODO переделать цикл
 
+//                InlineKeyboardButton inlineKeyboardButtonB = new InlineKeyboardButton();
 //                List<Category> categories = categoryInterface.getAllCategories();
 //                List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
-//                List<InlineKeyboardButton> keyboardButtonsRowAdditional = new ArrayList<>();
-//                keyboardButtonsRowAdditional.add(inlineKeyboardButton1);
-//                keyboardButtonsRowAdditional.add(inlineKeyboardButton2);
-//                keyboardButtonsRowAdditional.add(inlineKeyboardButton3);
-//                keyboardButtonsRowAdditional.add(inlineKeyboardButton4);
-
-
-//                List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-
-//                if (!categories.isEmpty()) {
-//                        //увеличивать порядковый номер кнопки
-//                        for (Category category:categories){
-
-//                            for (InlineKeyboardButton b: keyboardButtonsRowAdditional){
-//                                b.setText(category.getCategoryName());
-//                                b.setCallbackData("Callback");
-//                                keyboardButtonsRow.add(b);
-////                                System.out.println(b);
-//
-//                        }
-//                            for (InlineKeyboardButton but:keyboardButtonsRow){
-//                                System.out.println(but);
-//                            }
-//
-//
-//
-//
-//
+//                List<List<InlineKeyboardButton>> rowList1 = new ArrayList<>();
+//                if(!categories.isEmpty()){
+//                    for (Category category:categories){
+//                        inlineKeyboardButtonB.setText(category.getCategoryName());
+//                        inlineKeyboardButtonB.setCallbackData(category.getCategoryName());
+//                        System.out.println(category.getCategoryName());
 //                    }
+//                    keyboardButtonsRow.add(inlineKeyboardButtonB);
+//                    rowList1.add(keyboardButtonsRow);
+//                    inlineKeyboardMarkup.setKeyboard(rowList1);
+//                    System.out.println(rowList1);
+//                    sm.setReplyMarkup(inlineKeyboardMarkup);
+////                    try{
+////                        execute(sm);
+////                    } catch (TelegramApiException e){
+////                        e.printStackTrace();
+////                    }
 //
-////                    for (Category category : categories) {
-////
-////                            inlineKeyboardButton.setText(category.getCategoryName());
-////                            inlineKeyboardButton.setCallbackData("Callback");
-////                            rowList.add(keyboardButtonsRow);
-////
-////                }
-////                    keyboardButtonsRow.add(inlineKeyboardButton);
-//                    rowList.add(keyboardButtonsRow);
 //
-//                inlineKeyboardMarkup.setKeyboard(rowList);
-//                sm.setReplyMarkup(inlineKeyboardMarkup);
+//                }
 
-
-
-//            }
-//                //++
-            //++
-            //commented
-//                    if (!categories.isEmpty()) {
+            //commented replace
                 InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
                 InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
                 InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
