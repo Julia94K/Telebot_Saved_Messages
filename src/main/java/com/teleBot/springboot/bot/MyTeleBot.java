@@ -48,10 +48,12 @@ public class MyTeleBot extends TelegramLongPollingBot {
     ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
     SendMessageFunction sendMessageFunction;
     private final CategoryInterface categoryInterface;
+    private final NoteInterface noteInterface;
 
 
     @Autowired
-    public MyTeleBot(CategoryFunction addCategoryFunction, TgUserInterface tgUserInterface, NoteFunction noteFunction, CategoryInterface categoryInterface) {
+    public MyTeleBot(CategoryFunction addCategoryFunction, TgUserInterface tgUserInterface, NoteFunction noteFunction,
+                     CategoryInterface categoryInterface, NoteInterface noteInterface) {
         this.commandList = new CommandList(new SendMessageFunction(this), addCategoryFunction, tgUserInterface, noteFunction);
         //++
         this.tgUser = new TgUser();
@@ -59,6 +61,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
         this.category = new Category();
         this.note = new Note();
         this.categoryInterface = categoryInterface;
+        this.noteInterface = noteInterface;
 
 
     }
@@ -155,7 +158,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 inlineKeyboardButton4.setText("Shopping");
                 inlineKeyboardButton5.setText("Restaurants");
                 inlineKeyboardButton6.setText("Movies");
-                inlineKeyboardButton1.setCallbackData("Create note");
+                inlineKeyboardButton1.setCallbackData("Education");
                 inlineKeyboardButton2.setCallbackData("Create note");
                 inlineKeyboardButton3.setCallbackData("Create note");
                 inlineKeyboardButton4.setCallbackData("Create note");
@@ -281,36 +284,44 @@ public class MyTeleBot extends TelegramLongPollingBot {
     }
         //TODO method for callbackData - not quite ready yet
         else if (update.hasCallbackQuery()) {
-//            String call_data = update.getCallbackQuery().getData();
-//            long message_id = update.getCallbackQuery().getMessage().getMessageId();
-//            String  chat_id = update.getCallbackQuery().getMessage().getChatId().toString();
-//            if(call_data.equals("Create note")){
-//                String answer = "Updated message text";
-//                EditMessageText new_message = new EditMessageText();
-//                new_message.setChatId(update.getMessage().getChatId().toString());
-//                new_message.setText(answer);
-//                try{
-//                    execute(new_message);
-//
-//                }catch (TelegramApiException e){
-//                    e.printStackTrace();
-//                }
-//
-//            }
+            String callData = update.getCallbackQuery().getData();
             System.out.println(update.getCallbackQuery().getData());
             SendMessage sm = new SendMessage();
-            if(update.getCallbackQuery().getData().equals("Create note")){
+            if(callData.equals("Create note")){
                 sm.setChatId(update.getCallbackQuery().getMessage().getChatId().toString());
-                sm.setText(update.getCallbackQuery().getData());
+                sm.setText("text");
+
+                try {
+                    execute(sm);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
             }
 
-            try {
-                execute(sm);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
+            //нужно ли так для кажддой категории в классе бота прописывать условие или можно просто объединить их в один метод
+
+
+            if(callData.equals("Education")){
+                sm.setChatId(update.getCallbackQuery().getMessage().getChatId().toString());
+                List<Note> notes = noteInterface.getAllNotes();
+                if (!notes.isEmpty()) {
+                    for (Note note : notes) {
+                        sm.setText(note.getNoteText());
+                        System.out.println(note.getNoteText());
+                        try{
+                            execute(sm);
+                        } catch (TelegramApiException e){
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+
             }
+
 
         }
+
 
 }
 
