@@ -31,7 +31,6 @@ import static com.teleBot.springboot.commands.NameOfCommand.*;
 @Component
 public class MyTeleBot extends TelegramLongPollingBot {
 
-
     @Value("${bot.username}")
     private String username;
 
@@ -39,7 +38,6 @@ public class MyTeleBot extends TelegramLongPollingBot {
     private String token;
 
     private final CommandList commandList;
-    //++
     private final TgUser tgUser;
     private final UserMessage userMessage;
     private final Category category;
@@ -88,6 +86,17 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 //++
                 //попытка вывести коллекции в виде кнопок TODO переделать цикл
 
+                //варианты: создать массив объектов-кнопок
+                //заполнить этот массив кнопками
+//                InlineKeyboardButton [] inlineKeyboardButtons = new InlineKeyboardButton[10];
+//
+//                for (InlineKeyboardButton ib:inlineKeyboardButtons){
+//                    ib.setText(category.getCategoryName());
+//                    ib.setCallbackData(category.getCategoryName());
+//                    System.out.println(ib);
+//                }
+
+
 //                InlineKeyboardButton inlineKeyboardButtonB = new InlineKeyboardButton();
 //                List<Category> categories = categoryInterface.getAllCategories();
 //                List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
@@ -112,7 +121,8 @@ public class MyTeleBot extends TelegramLongPollingBot {
 //
 //                }
 
-            //commented replace
+                //commented replace
+
                 InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
                 InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
                 InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
@@ -126,11 +136,11 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 inlineKeyboardButton5.setText("Restaurants");
                 inlineKeyboardButton6.setText("Movies");
                 inlineKeyboardButton1.setCallbackData("Education");
-                inlineKeyboardButton2.setCallbackData("Create note");
-                inlineKeyboardButton3.setCallbackData("Create note");
-                inlineKeyboardButton4.setCallbackData("Create note");
-                inlineKeyboardButton5.setCallbackData("Create note");
-                inlineKeyboardButton6.setCallbackData("Create note");
+                inlineKeyboardButton2.setCallbackData("Travel");
+                inlineKeyboardButton3.setCallbackData("Work");
+                inlineKeyboardButton4.setCallbackData("Shopping");
+                inlineKeyboardButton5.setCallbackData("Restaurants");
+                inlineKeyboardButton6.setCallbackData("Movies");
                 List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
                 List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
                 keyboardButtonsRow1.add(inlineKeyboardButton1);
@@ -146,118 +156,90 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 sm.setReplyMarkup(inlineKeyboardMarkup);
 
 
-            try {
-                execute(sm);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
+                try {
+                    execute(sm);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
 
-        }
-        if (message.equals("/start")) {
-            System.out.println(message);
-            SendMessage sm = new SendMessage();
-            sm.setChatId(update.getMessage().getChatId().toString());
-            sm.setText(message);
+            }
+            if (message.equals("/start")) {
+                System.out.println(message);
+                SendMessage sm = new SendMessage();
+                sm.setChatId(update.getMessage().getChatId().toString());
+                sm.setText("Choose one the options bellow");
 //        sm.setText(getMessage(message));
-            List<KeyboardRow> keyboard = new ArrayList<>();
+                List<KeyboardRow> keyboard = new ArrayList<>();
 
-            KeyboardRow row = new KeyboardRow();
-            replyKeyboardMarkup.setSelective(true);
-            replyKeyboardMarkup.setResizeKeyboard(true);
-            replyKeyboardMarkup.setOneTimeKeyboard(true);
-            System.out.println(message);
-            row.add("Help");
-            row.add("Collections");
-            row.add("Create note");
-            keyboard.add(row);
-            replyKeyboardMarkup.setKeyboard(keyboard);
-            sm.setReplyMarkup(replyKeyboardMarkup);
-            try {
-                execute(sm);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
+                KeyboardRow row = new KeyboardRow();
+                replyKeyboardMarkup.setSelective(true);
+                replyKeyboardMarkup.setResizeKeyboard(true);
+                replyKeyboardMarkup.setOneTimeKeyboard(false);
+                System.out.println(message);
+                row.add("Help");
+                row.add("Collections");
+                row.add("Create note");
+                keyboard.add(row);
+                replyKeyboardMarkup.setKeyboard(keyboard);
+                sm.setReplyMarkup(replyKeyboardMarkup);
+                try {
+                    execute(sm);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
             }
-        }
-        if (message.equals("Help")) {
-            System.out.println(message);
-            SendMessage sm = new SendMessage();
-            sm.setChatId(update.getMessage().getChatId().toString());
-            sm.setText(message);
-            List<KeyboardRow> keyboard = new ArrayList<>();
+            if(message.equals("Create note")){
 
-            KeyboardRow row = new KeyboardRow();
-            replyKeyboardMarkup.setSelective(true);
-            replyKeyboardMarkup.setResizeKeyboard(true);
-            replyKeyboardMarkup.setOneTimeKeyboard(true);
-            row.add("Collections");
-            row.add("Create note");
-            keyboard.add(row);
-            replyKeyboardMarkup.setKeyboard(keyboard);
-            sm.setReplyMarkup(replyKeyboardMarkup);
-            try {
-                execute(sm);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
+                List <Category> categories = categoryInterface.getAllCategories();
+                List<KeyboardRow> keyboard = new ArrayList<>();
+                KeyboardRow row1 = new KeyboardRow();
+                KeyboardRow row2 = new KeyboardRow();
+                replyKeyboardMarkup.setSelective(true);
+                replyKeyboardMarkup.setResizeKeyboard(true);
+                replyKeyboardMarkup.setOneTimeKeyboard(false);
+
+                //тут код, чтобы отобразить категории из базы в виде кнопок меню
+                //TODO как сделать, чтобы кнопки выгляделим нормально и запускалась логика на сохранение заметок
+                if(!categories.isEmpty()){
+                    for (Category category :categories){
+                        if(row1.size()<=3){
+                            row1.add(category.getCategoryName());
+                        }
+                        else {
+                            row2.add(category.getCategoryName());
+                        }
+
+                    }
+                    keyboard.add(row);
+                    keyboard.add(row2);
+                    replyKeyboardMarkup.setKeyboard(keyboard);
+                    SendMessage sm = new SendMessage();
+                    sm.setChatId(update.getMessage().getChatId().toString());
+                    sm.setText("Chose one of the collections");
+                    sm.setReplyMarkup(replyKeyboardMarkup);
+                    try {
+                        execute(sm);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-        }
+            if (message.equals("Help")) {
+                System.out.println(message);
+                SendMessage sm = new SendMessage();
+                sm.setChatId(update.getMessage().getChatId().toString());
+                sm.setText(message);
+                List<KeyboardRow> keyboard = new ArrayList<>();
 
-
-        //positive case - we answer with one of exids (if exists)sting comman
-        //обработка команд
-
-        if (message.startsWith(PREFIX)) {
-            if (tgUser.isActive()) {
-                tgUser.setActive(false);
-            }
-            String thisCommand = message.split(" ")[0].toLowerCase();
-            commandList.processWrongMessages(thisCommand).executeCommand(update);
-            System.out.println("command detected");
-            if (update.getMessage().getText().equals("/savecategory")) {
-
-                tgUser.setActive(true);
-                tgUser.setUserStatus(0);
-
-            }
-            if (update.getMessage().getText().equals("/savenote")) {
-                tgUser.setActive(true);
-                tgUser.setUserStatus(1);
-            }
-        }
-
-
-        //обработка простых сообщений от пользователя (когда ожидается ввод)
-        else if (tgUser.isActive() && tgUser.getUserStatus().equals(0)) {
-            userMessage.proceedSimpleMessage(update);
-            tgUser.setActive(false);
-        } else if (tgUser.isActive() && tgUser.getUserStatus().equals(1)) {
-            userMessage.proceedNote(update);
-            tgUser.setUserStatus(2);
-//                tgUser.setActive(false);
-        } else if (tgUser.isActive() && tgUser.getUserStatus().equals(2)) {
-            userMessage.saveNoteText(update);
-            tgUser.setActive(false);
-        }
-
-
-        else {
-            //по идее не имеет смысла проверять, команда или нет. Бот должен уметь работать как с командами, так и с обычными сообщениями
-//                commandList.processWrongMessages(NOT.getNameOfCommand()).executeCommand(update);
-            //default keyboard + help with commands
-            //TODO method for default keyboard
-            commandList.processWrongMessages(HELP.getNameOfCommand()).executeCommand(update);
-
-
-        }
-    }
-        //TODO method for callbackData - not quite ready yet
-        else if (update.hasCallbackQuery()) {
-            String callData = update.getCallbackQuery().getData();
-            System.out.println(update.getCallbackQuery().getData());
-            SendMessage sm = new SendMessage();
-            if(callData.equals("Create note")){
-                sm.setChatId(update.getCallbackQuery().getMessage().getChatId().toString());
-                sm.setText("text");
-
+                KeyboardRow row = new KeyboardRow();
+                replyKeyboardMarkup.setSelective(true);
+                replyKeyboardMarkup.setResizeKeyboard(true);
+                replyKeyboardMarkup.setOneTimeKeyboard(false);
+                row.add("Collections");
+                row.add("Create note");
+                keyboard.add(row);
+                replyKeyboardMarkup.setKeyboard(keyboard);
+                sm.setReplyMarkup(replyKeyboardMarkup);
                 try {
                     execute(sm);
                 } catch (TelegramApiException e) {
@@ -265,33 +247,60 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 }
             }
 
-            //нужно ли так для кажддой категории в классе бота прописывать условие или можно просто объединить их в один метод
+            //обработка команд
 
-
-            if(callData.equals("Education")){
-                sm.setChatId(update.getCallbackQuery().getMessage().getChatId().toString());
-                List<Note> notes = noteInterface.getAllNotes();
-                if (!notes.isEmpty()) {
-                    for (Note note : notes) {
-                        sm.setText(note.getNoteText());
-                        System.out.println(note.getNoteText());
-                        try{
-                            execute(sm);
-                        } catch (TelegramApiException e){
-                            e.printStackTrace();
-                        }
-
-                    }
+            if (message.startsWith(PREFIX)) {
+                if (tgUser.isActive()) {
+                    tgUser.setActive(false);
                 }
+                String thisCommand = message.split(" ")[0].toLowerCase();
+                commandList.processWrongMessages(thisCommand).executeCommand(update);
+                System.out.println("command detected");
+                if (update.getMessage().getText().equals("/savecategory")) {
 
+                    tgUser.setActive(true);
+                    tgUser.setUserStatus(0);
+
+                }
+                if (update.getMessage().getText().equals("/savenote")||update.getMessage().getText().equals("Create note")) {
+                    tgUser.setActive(true);
+                    tgUser.setUserStatus(1);
+                }
             }
 
+
+            //обработка простых сообщений от пользователя (когда ожидается ввод)
+            else if (tgUser.isActive() && tgUser.getUserStatus().equals(0)) {
+                userMessage.proceedSimpleMessage(update);
+                tgUser.setActive(false);
+            } else if (tgUser.isActive() && tgUser.getUserStatus().equals(1)) {
+                userMessage.proceedNote(update);
+                tgUser.setUserStatus(2);
+//                tgUser.setActive(false);
+            } else if (tgUser.isActive() && tgUser.getUserStatus().equals(2)) {
+                userMessage.saveNoteText(update);
+                tgUser.setActive(false);
+            } else {
+                //по идее не имеет смысла проверять, команда или нет. Бот должен уметь работать как с командами, так и с обычными сообщениями
+//                commandList.processWrongMessages(NOT.getNameOfCommand()).executeCommand(update);
+                //default keyboard + help with commands
+                //TODO method for default keyboard
+                commandList.processWrongMessages(HELP.getNameOfCommand()).executeCommand(update);
+
+
+            }
+        }
+        //if user pressed one of the buttons
+        else if (update.hasCallbackQuery()) {
+            //метод, в который передается значение callData и в зависимости от этого значения реализуется функция
+            String callData = update.getCallbackQuery().getData();
+            String chat_id = update.getCallbackQuery().getMessage().getChatId().toString();
+            getNotesForCategory(callData, chat_id);
 
         }
 
 
-}
-
+    }
 
 
     //TODO класс для вызова дефолтной клавиатуры
@@ -307,4 +316,45 @@ public class MyTeleBot extends TelegramLongPollingBot {
         return token;
     }
 
+    //универсальный метод, который получает на вход значение коллекции и чат айди и ищет все заметки,
+    // сохраненные для данной коллеции
+    //TODO как сделать так, чтобы в случае, если в данном методе ничего не было найдено, то возвращался текст "коллекция пустая"
+    public void   getNotesForCategory(String callbackData, String chatId) {
+        SendMessage sm = new SendMessage();
+        List <Note> notes = noteInterface.getAllNotes();
+        List <String> values = new ArrayList<>();
+        for (Note n: notes){
+            values.add(n.getCategoryName());
+            values.add(n.getChatId().toString());
+        }
+        //TODO только для этого чат айди
+        if(values.contains(callbackData)&&!notes.isEmpty()){
+//            if (!notes.isEmpty()) {
+                //condition: only this collection name and only for this user (based on chatId)
+                for (Note note : notes) {
+                    if (callbackData.equals(note.getCategoryName()) && chatId.equals(note.getChatId().toString())) {
+                        sm.setChatId(chatId);
+                        sm.setText(note.getNoteText());
+
+                        System.out.println(note.getNoteText());
+                        try {
+                            execute(sm);
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+            }
+        //if the list with notes is empty for this user
+        else {
+            sm.setChatId(chatId);
+            sm.setText("Nothing was found");
+            try {
+                execute(sm);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

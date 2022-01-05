@@ -28,7 +28,6 @@ public class UserMessage implements User {
     //обработка нажатий пользователя на клавиатуру
 
 
-
     private final SendMessageInterface sendMessageInterface;
     private final CategoryInterface categoryInterface;
     private final NoteInterface noteInterface;
@@ -45,17 +44,27 @@ public class UserMessage implements User {
     @Override
 
     //сохранение категории в БД
+    //TODO проверка на уникальность
     public void proceedSimpleMessage(Update update) {
 
         String text = update.getMessage().getText();
         Category category = new Category();
+        List<Category> categories = categoryInterface.getAllCategories();
+        List<String> values = new ArrayList<>();
         Integer updateId = update.getUpdateId();
         category.setCategoryName(text);
         category.setUpdateId(updateId);
-        categoryInterface.save(category);
-        sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), SAVED_MSG);
-
-
+        //check if this value is unique, else show message "Already exists"!
+        for (Category c : categories) {
+            values.add(c.getCategoryName());
+        }
+        if (!values.contains(text)) {
+            categoryInterface.save(category);
+            sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), SAVED_MSG);
+        } else {
+            sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), "Category " +
+                    text.toUpperCase() + " already exists");
+        }
     }
 
     //сохранение заметки в БД ч1
@@ -64,18 +73,18 @@ public class UserMessage implements User {
         String text = update.getMessage().getText();
         Long chatId = update.getMessage().getChatId();
         Note note = new Note();
-        //проверить нет ли уже записи с чат айди вместо текста. Если есть, то удалить
+        //TODO проверить нет ли уже записи с пустым текстом. Если есть, то удалить
         Integer updateId = update.getUpdateId();
         note.setCategoryName(text);
         note.setUpdateId(updateId);
         note.setChatId(chatId);
-        note.setNoteText(chatId.toString());
+//        note.setNoteText(chatId.toString());
         noteInterface.save(note);
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), "Add the text of the note");
 
 
-
     }
+
 
     //сохранение заметки в БД ч2
     //TODO нужно полностью обнулять запись без текста, если пользователь выбрал любую другую команду
@@ -83,15 +92,14 @@ public class UserMessage implements User {
 
     public void saveNoteText(Update update) {
         String text = update.getMessage().getText();
-        //нужно найти строчку, в которой текст = chatId
+        //нужно найти строчку, в которой текст пустой и записать в нее
         //try catch?
         String chatId = update.getMessage().getChatId().toString();
         List<Note> notes = noteInterface.getAllNotes();
         for (Note note : notes) {
-            if (note.getNoteText().equals(chatId)) {
+            if (note.getNoteText() == null && chatId.equals(note.getChatId().toString())) {
                 note.setNoteText(text);
                 noteInterface.save(note);
-
             }
         }
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), "This note was added");

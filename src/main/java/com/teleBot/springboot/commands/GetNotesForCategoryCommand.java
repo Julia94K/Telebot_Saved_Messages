@@ -5,7 +5,9 @@ import com.teleBot.springboot.functions.NoteInterface;
 import com.teleBot.springboot.functions.SendMessageInterface;
 import com.teleBot.springboot.functions.TgUserInterface;
 import com.teleBot.springboot.repository.entity.Note;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 

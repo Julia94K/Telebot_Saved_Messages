@@ -7,6 +7,7 @@ public enum NameOfCommand {
     HELP("/help"),
     NOT(""),
     GET_CATEGORY("/getcategories"),
+    GET_CATEGORY_TEXT("Collections"),
     SAVE_CATEGORY("/savecategory"),
     SAVE_NOTE("/savenote"),
     GET_NOTE("/getnotes"),
