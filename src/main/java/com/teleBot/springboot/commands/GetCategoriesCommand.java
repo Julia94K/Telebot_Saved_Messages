@@ -15,7 +15,7 @@ import java.util.List;
 
 //данная команда выдает список сохраненных в базе категорий
 
-public class GetCategoriesCommand implements Command{
+public class GetCategoriesCommand implements Command {
     //++
 //    InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 //    InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
@@ -29,19 +29,20 @@ public class GetCategoriesCommand implements Command{
         this.categoryInterface = categoryInterface;
     }
 
-
-
+//оптимизировать с чат айди сейчас для другого сообщения печатается, что чат айди пустой
     @Override
-    public void executeCommand(Update update){
+    public void executeCommand(Update update) {
         List<Category> categories = categoryInterface.getAllCategories();
-        sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),INFO_CATEGORIES);
-        if(!categories.isEmpty()){
-            for (Category category: categories){
-                sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),category.getCategoryName());
-            }
-        } else sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),"List of categories is empty");
+        Long chat_id = update.getMessage().getChatId();
+        sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), INFO_CATEGORIES);
+        for (Category category : categories) {
+            if (!categories.isEmpty()) {
+                if (chat_id.equals(category.getChatId())) {
+                    sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), category.getCategoryName());
+                }
+            } else
+                sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), "List of categories is empty");
 
+        }
     }
-
-
 }

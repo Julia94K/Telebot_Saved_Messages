@@ -12,5 +12,4 @@ import java.util.List;
 public interface CategoriesRepository extends JpaRepository<Category,String> {
 //    @Query("select Category.categoryName from #{#categoriesRepository}")
 //    List <Category> getAllNames();
-    //возможно стоит реализовать здесь какой-то метод
 }

@@ -15,6 +15,9 @@ public class Category {
     @Column(name = "update_id") //имя поля таблицы ДБ
     private Integer updateId;
 
+    @Column(name="chat_id")
+    private Long chatId;
+
     @Column(name="category_name")//имя поля таблицы ДБ
     private String categoryName;
 
@@ -33,5 +36,14 @@ public class Category {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+
+    public Long getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(Long chatId) {
+        this.chatId = chatId;
     }
 }

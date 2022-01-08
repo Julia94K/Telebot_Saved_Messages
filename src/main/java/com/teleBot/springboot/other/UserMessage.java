@@ -52,11 +52,15 @@ public class UserMessage implements User {
         List<Category> categories = categoryInterface.getAllCategories();
         List<String> values = new ArrayList<>();
         Integer updateId = update.getUpdateId();
+        Long chatId = update.getMessage().getChatId();
         category.setCategoryName(text);
         category.setUpdateId(updateId);
+        category.setChatId(chatId);
         //check if this value is unique, else show message "Already exists"!
         for (Category c : categories) {
-            values.add(c.getCategoryName());
+            if(chatId.equals(c.getChatId())){
+                values.add(c.getCategoryName());
+            }
         }
         if (!values.contains(text)) {
             categoryInterface.save(category);

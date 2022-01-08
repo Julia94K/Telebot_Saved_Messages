@@ -17,24 +17,15 @@ public class HelpCommand implements Command{
             "/getnotes"+
             "\n"+
             "/help";
-//    public static final String ERROR_MSG = "User is not active";
     private final SendMessageInterface sendMessageInterface;
-
-
 
     public HelpCommand (SendMessageInterface sendMessageInterface) {
         this.sendMessageInterface = sendMessageInterface;
     }
 
-
-
-    //тут первое условие почему-то всегда отрабатывает. Вообще нужно проверить, что для этого чат айди актив = актив
-
     @Override
     public void executeCommand(Update update) {
-        String chatId = update.getMessage().getChatId().toString();
             sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), HELP_MSG);
-
 
         }
 
