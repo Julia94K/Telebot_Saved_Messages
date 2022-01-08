@@ -84,7 +84,6 @@ public class UserMessage implements User {
                 noteInterface.delete(n);
             }
         }
-        //TODO проверить нет ли уже записи с пустым текстом. Если есть, то удалить
         Integer updateId = update.getUpdateId();
         note.setCategoryName(text);
         note.setUpdateId(updateId);

@@ -159,14 +159,17 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 sm.setText("Choose one the options bellow");
                 List<KeyboardRow> keyboard = new ArrayList<>();
                 KeyboardRow row = new KeyboardRow();
+                KeyboardRow row2 = new KeyboardRow();
                 replyKeyboardMarkup.setSelective(true);
                 replyKeyboardMarkup.setResizeKeyboard(true);
                 replyKeyboardMarkup.setOneTimeKeyboard(false);
                 System.out.println(message);
-                row.add("Help");
-                row.add("Collections");
-                row.add("Create note");
+                row.add("/help"); // Help
+                row.add("/getcategories"); // Collections
+                row2.add("/savenote"); // Save note
+                row2.add("/savecategory"); // Save collection
                 keyboard.add(row);
+                keyboard.add(row2);
                 replyKeyboardMarkup.setKeyboard(keyboard);
                 sm.setReplyMarkup(replyKeyboardMarkup);
                 try {
@@ -242,7 +245,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
 
             //обработка команд
             //TODO уловие исправить, чтобы проверять CommandMap?
-            if (message.startsWith(PREFIX)||message.equals("Create note")) {
+            if (message.startsWith(PREFIX)) {
                 if (tgUser.isActive()) {
                     tgUser.setActive(false);
                 }
@@ -253,7 +256,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
                     tgUser.setActive(true);
                     tgUser.setUserStatus(0);
                 }
-                if (update.getMessage().getText().equals("/savenote")||update.getMessage().getText().equals("Create note")) {
+                if (update.getMessage().getText().equals("/savenote")||update.getMessage().getText().equals("Save note")) {
                     tgUser.setActive(true);
                     tgUser.setUserStatus(1);
                 }
@@ -268,7 +271,6 @@ public class MyTeleBot extends TelegramLongPollingBot {
             } else if (tgUser.isActive() && tgUser.getUserStatus().equals(2)) {
                 userMessage.saveNoteText(update);
                 tgUser.setActive(false);
-                //всегда добавляется список дефолтных команд
             } else {
                 //по идее не имеет смысла проверять, команда или нет. Бот должен уметь работать как с командами, так и с обычными сообщениями
 //                commandList.processWrongMessages(NOT.getNameOfCommand()).executeCommand(update);
