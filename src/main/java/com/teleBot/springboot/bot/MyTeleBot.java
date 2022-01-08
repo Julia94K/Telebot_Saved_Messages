@@ -241,7 +241,8 @@ public class MyTeleBot extends TelegramLongPollingBot {
             }
 
             //обработка команд
-            if (message.startsWith(PREFIX)) {
+            //TODO уловие исправить, чтобы проверять CommandMap?
+            if (message.startsWith(PREFIX)||message.equals("Create note")) {
                 if (tgUser.isActive()) {
                     tgUser.setActive(false);
                 }
@@ -252,7 +253,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
                     tgUser.setActive(true);
                     tgUser.setUserStatus(0);
                 }
-                if (update.getMessage().getText().equals("/savenote")) {
+                if (update.getMessage().getText().equals("/savenote")||update.getMessage().getText().equals("Create note")) {
                     tgUser.setActive(true);
                     tgUser.setUserStatus(1);
                 }

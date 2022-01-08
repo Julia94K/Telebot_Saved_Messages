@@ -27,6 +27,7 @@ public class CommandList {
         commandMap.put(GET_CATEGORY.getNameOfCommand(),new GetCategoriesCommand(sendMessageInterface,categoryInterface));
         commandMap.put(SAVE_CATEGORY.getNameOfCommand(),new SaveNewCategoryCommand(sendMessageInterface,categoryInterface));
         commandMap.put(SAVE_NOTE.getNameOfCommand(),new SaveNoteCommand(sendMessageInterface,noteInterface,categoryInterface));
+        commandMap.put(SAVE_NOTE_TEXT.getNameOfCommand(),new SaveNoteCommand(sendMessageInterface,noteInterface,categoryInterface));
         commandMap.put(GET_NOTE.getNameOfCommand(),new GetNotesForCategoryCommand(sendMessageInterface,categoryInterface,noteInterface));
         unknownCommand = new UnknownCommand(sendMessageInterface);
 

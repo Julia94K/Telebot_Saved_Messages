@@ -23,6 +23,11 @@ public class NoteFunction implements NoteInterface{
     }
 
     @Override
+    public void delete (Note note){
+        noteRepository.delete(note);
+    }
+
+    @Override
     public List<Note>getAllNotes(){
         return noteRepository.findAll();
 

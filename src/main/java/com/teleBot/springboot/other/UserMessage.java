@@ -77,6 +77,13 @@ public class UserMessage implements User {
         String text = update.getMessage().getText();
         Long chatId = update.getMessage().getChatId();
         Note note = new Note();
+        List<Note> notes = noteInterface.getAllNotes();
+        //проверить, есть ли в базе строчка с пустым текстом, есди да - удалить ее.
+        for (Note n : notes) {
+            if (n.getNoteText()==null && n.getChatId().equals(chatId)) {
+                noteInterface.delete(n);
+            }
+        }
         //TODO проверить нет ли уже записи с пустым текстом. Если есть, то удалить
         Integer updateId = update.getUpdateId();
         note.setCategoryName(text);

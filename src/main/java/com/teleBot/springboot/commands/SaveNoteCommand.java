@@ -16,12 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class SaveNoteCommand implements Command{
+public class SaveNoteCommand implements Command {
 
     private static InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
 
     ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-    String ADD_NOTE = "Select category:";
+    String ADD_NOTE = "Select a category:";
     private final SendMessageInterface sendMessageInterface;
     private final NoteInterface noteInterface;
     private final CategoryInterface categoryInterface;

@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface NoteInterface {
     void save(Note note);
+    void delete (Note note);
     List<Note> getAllNotes();
 }
