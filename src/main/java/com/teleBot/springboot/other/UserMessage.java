@@ -68,7 +68,8 @@ public class UserMessage implements User {
                 categoryInterface.save(category);
                 sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), SAVED_MSG);
             } else {
-                sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), ">12");
+                sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),
+                        "The maximum number of collection is reached (>12)");
             }
         } else {
             sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), "Category " +
