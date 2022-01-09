@@ -2,6 +2,7 @@ package com.teleBot.springboot.bot;
 
 import com.teleBot.springboot.commands.Command;
 import com.teleBot.springboot.commands.CommandList;
+import com.teleBot.springboot.commands.HelpCommand;
 import com.teleBot.springboot.commands.SaveNoteCommand;
 import com.teleBot.springboot.functions.*;
 import com.teleBot.springboot.other.UserMessage;
@@ -76,7 +77,27 @@ public class MyTeleBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String message = update.getMessage().getText().trim();
-            if (message.equals("/getcategories") || message.equals("Collections")) {
+            //заменить обычные слова на команды
+            switch (message) {
+                case "Help":
+                    message = "/help";
+                    break;
+                case "Home":
+                    message = "/start";
+                    break;
+                case "Collections":
+                    message = "/getcategories";
+                    break;
+                case "New collection":
+                    message = "/savecategory";
+                    break;
+                case "New note":
+                    message = "/savenote";
+                    break;
+            }
+
+            if (message.equals("/getcategories")) {
+                // || message.equals("Collections")
                 SendMessage sm = new SendMessage();
                 sm.setChatId(update.getMessage().getChatId().toString());
                 sm.setText("\uD83E\uDDA9 Chose one of the collections or select a command bellow: \uD83E\uDDA9");
@@ -152,7 +173,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
-            if (message.equals("/start")||message.equals("Home \uD83C\uDFE0")) {
+            if (message.equals("/start") || message.equals("Home \uD83C\uDFE0")) {
                 System.out.println(message);
                 SendMessage sm = new SendMessage();
                 sm.setChatId(update.getMessage().getChatId().toString());
@@ -164,10 +185,10 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 replyKeyboardMarkup.setResizeKeyboard(true);
                 replyKeyboardMarkup.setOneTimeKeyboard(false);
                 System.out.println(message);
-                row.add("/help"); // Help
-                row.add("/getcategories"); // Collections
-                row2.add("/savenote"); // Save note
-                row2.add("/savecategory"); // Save collection
+                row.add("Help"); // Help
+                row.add("Collections"); // Collections
+                row2.add("New collection"); // Save note
+                row2.add("New note"); // Save collection
                 keyboard.add(row);
                 keyboard.add(row2);
                 replyKeyboardMarkup.setKeyboard(keyboard);
@@ -178,7 +199,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
-            if (message.equals("Create note")||message.equals("/savenote")) {
+            if (message.equals("Create note") || message.equals("/savenote")) {
                 Long chat_id = update.getMessage().getChatId();
                 List<Category> categories = categoryInterface.getAllCategories();
                 List<KeyboardRow> keyboard = new ArrayList<>();
@@ -220,28 +241,6 @@ public class MyTeleBot extends TelegramLongPollingBot {
                     }
                 }
             }
-            //возможно, эта опция вообще не нужна
-            if (message.equals("Help")) {
-                SendMessage sm = new SendMessage();
-                sm.setChatId(update.getMessage().getChatId().toString());
-                sm.setText("Please select one of the options or one of the commands");
-                List<KeyboardRow> keyboard = new ArrayList<>();
-                KeyboardRow row = new KeyboardRow();
-                replyKeyboardMarkup.setSelective(true);
-                replyKeyboardMarkup.setResizeKeyboard(true);
-                replyKeyboardMarkup.setOneTimeKeyboard(false);
-                row.add("Collections");
-                row.add("Create note");
-                row.add("Home \uD83C\uDFE0");
-                keyboard.add(row);
-                replyKeyboardMarkup.setKeyboard(keyboard);
-                sm.setReplyMarkup(replyKeyboardMarkup);
-                try {
-                    execute(sm);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            }
 
             //обработка команд
             //TODO уловие исправить, чтобы проверять CommandMap?
@@ -252,15 +251,16 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 String thisCommand = message.split(" ")[0].toLowerCase();
                 commandList.processWrongMessages(thisCommand).executeCommand(update);
                 System.out.println("command detected");
-                if (update.getMessage().getText().equals("/savecategory")) {
+                if (update.getMessage().getText().equals("/savecategory")||(update.getMessage().getText().equals("New collection"))) {
                     tgUser.setActive(true);
                     tgUser.setUserStatus(0);
                 }
-                if (update.getMessage().getText().equals("/savenote")||update.getMessage().getText().equals("Save note")) {
+                if (update.getMessage().getText().equals("/savenote") || update.getMessage().getText().equals("New note")) {
                     tgUser.setActive(true);
                     tgUser.setUserStatus(1);
                 }
             }
+
             //обработка простых сообщений от пользователя (когда ожидается ввод)
             else if (tgUser.isActive() && tgUser.getUserStatus().equals(0)) {
                 userMessage.proceedSimpleMessage(update);

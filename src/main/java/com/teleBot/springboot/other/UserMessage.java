@@ -63,8 +63,13 @@ public class UserMessage implements User {
             }
         }
         if (!values.contains(text)) {
-            categoryInterface.save(category);
-            sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), SAVED_MSG);
+            //TODO поставить проверку на количество категорий в другое место (до сообщения добавьте коллекцию)
+            if(values.size()<=11){
+                categoryInterface.save(category);
+                sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), SAVED_MSG);
+            } else {
+                sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), ">12");
+            }
         } else {
             sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), "Category " +
                     text.toUpperCase() + " already exists");
@@ -78,7 +83,7 @@ public class UserMessage implements User {
         Long chatId = update.getMessage().getChatId();
         Note note = new Note();
         List<Note> notes = noteInterface.getAllNotes();
-        //проверить, есть ли в базе строчка с пустым текстом, есди да - удалить ее.
+        //проверить, есть ли уже в базе строчка с пустым текстом, есди да - удалить ее.
         for (Note n : notes) {
             if (n.getNoteText()==null && n.getChatId().equals(chatId)) {
                 noteInterface.delete(n);
