@@ -51,9 +51,6 @@ public class MyTeleBot extends TelegramLongPollingBot {
     private final NoteInterface noteInterface;
 
 
-
-
-
     @Autowired
     public MyTeleBot(CategoryFunction addCategoryFunction, TgUserInterface tgUserInterface, NoteFunction noteFunction,
                      CategoryInterface categoryInterface, NoteInterface noteInterface) {
@@ -312,8 +309,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
         return token;
     }
 
-    //универсальный метод, который получает на вход значение коллекции и чат айди и ищет все заметки,
-    // сохраненные для данной коллеции
+//удаляем конкретную заметку
     public void deleteCategory(String callbackData, String chatId) {
 
         List<Note> notes = noteInterface.getAllNotes();
@@ -333,7 +329,8 @@ public class MyTeleBot extends TelegramLongPollingBot {
 
     }
 
-
+    //универсальный метод, который получает на вход значение коллекции и чат айди и ищет все заметки,
+    // сохраненные для данной коллеции
     public void getNotesForCategory(String callbackData, String chatId) {
         SendMessage sm = new SendMessage();
         List<Note> notes = noteInterface.getAllNotes();
