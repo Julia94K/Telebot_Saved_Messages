@@ -47,9 +47,11 @@ public class MyTeleBot extends TelegramLongPollingBot {
     private final Note note;
     private final String PREFIX = "/";
     ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-    SendMessageFunction sendMessageFunction;
     private final CategoryInterface categoryInterface;
     private final NoteInterface noteInterface;
+
+
+
 
 
     @Autowired
@@ -287,15 +289,12 @@ public class MyTeleBot extends TelegramLongPollingBot {
             for (Note note : notes) {
                 updateIds.add(note.getUpdateId().toString());
             }
-            System.out.println(updateIds);
+            //метод для удаления заметки
             if (updateIds.contains(callData)) {
-                for (Note n : notes) {
-                    if (n.getUpdateId().toString().equals(callData)) {
-                        noteInterface.delete(n);
-                    }
-                }
-                //метод, в который передается значение callData и в зависимости от этого значения отображается необходимая коллекция
+                deleteCategory(callData, chat_id);
+
             } else {
+                //метод, в который передается значение callData и в зависимости от этого значения отображается необходимая коллекция
                 getNotesForCategory(callData, chat_id);
             }
         }
@@ -315,7 +314,22 @@ public class MyTeleBot extends TelegramLongPollingBot {
 
     //универсальный метод, который получает на вход значение коллекции и чат айди и ищет все заметки,
     // сохраненные для данной коллеции
-    public void deleteCategory(String callbackData) {
+    public void deleteCategory(String callbackData, String chatId) {
+
+        List<Note> notes = noteInterface.getAllNotes();
+        for (Note n : notes) {
+            if (n.getUpdateId().toString().equals(callbackData)) {
+                noteInterface.delete(n);
+            }
+        }
+        SendMessage sm = new SendMessage();
+        sm.setChatId(chatId);
+        sm.setText("This note was deleted!");
+        try {
+            execute(sm);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -360,7 +374,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
         //if the list with notes is empty for this user
         else {
             sm.setChatId(chatId);
-            sm.setText("The collection " + callbackData.toUpperCase() + " is empty");
+            sm.setText("Nothing found");
             try {
                 execute(sm);
             } catch (TelegramApiException e) {
