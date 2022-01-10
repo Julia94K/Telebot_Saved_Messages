@@ -4,7 +4,7 @@ Telegram bot for saved Messages
 Реализованный функционал: 
 1. Команда /start или кнопка Home:
 - выдает приветственное сообщение 
-- устанавливает клавиатуру с опциями: "Help","Collections","Create note". 
+- устанавливает клавиатуру с опциями: "Help","Collections", "New collection", "New note". 
 2. Команда /help или кнопка Help:
 - выдает список доступных команд
 3. Команда /getcategories или или кнопка Сollections:
