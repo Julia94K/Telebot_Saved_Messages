@@ -129,13 +129,13 @@ public class MyTeleBot extends TelegramLongPollingBot {
 //                        sm.setReplyMarkup(inlineKeyboardMarkup);
                     }
                 }
-//                    //постоянно перезаписывается название кнопки
 //                }
 //                try {
 //                    execute(sm);
 //                } catch (TelegramApiException e) {
 //                    e.printStackTrace();
 //                }
+                //hardcoded values for buttons
                 InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
                 InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
                 InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
@@ -206,13 +206,13 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 KeyboardRow row1 = new KeyboardRow();
                 KeyboardRow row2 = new KeyboardRow();
                 KeyboardRow row3 = new KeyboardRow();
+                KeyboardRow row4 = new KeyboardRow();
 
                 replyKeyboardMarkup.setSelective(true);
                 replyKeyboardMarkup.setResizeKeyboard(true);
                 replyKeyboardMarkup.setOneTimeKeyboard(false);
 
                 //тут код, чтобы отобразить категории из базы в виде кнопок меню
-                //TODO как сделать, чтобы кнопки выгляделим нормально и запускалась логика на сохранение заметок
                 if (!categories.isEmpty()) {
                     for (Category category : categories) {
                         if (chat_id.equals(category.getChatId())) {
@@ -225,10 +225,11 @@ public class MyTeleBot extends TelegramLongPollingBot {
                             }
                         }
                     }
-                    row3.add("Home \uD83C\uDFE0");
+                    row4.add("Home");
                     keyboard.add(row1);
                     keyboard.add(row2);
                     keyboard.add(row3);
+                    keyboard.add(row4);
                     replyKeyboardMarkup.setKeyboard(keyboard);
                     SendMessage sm = new SendMessage();
                     sm.setChatId(update.getMessage().getChatId().toString());
@@ -243,7 +244,6 @@ public class MyTeleBot extends TelegramLongPollingBot {
             }
 
             //обработка команд
-            //TODO уловие исправить, чтобы проверять CommandMap?
             if (message.startsWith(PREFIX)) {
                 if (tgUser.isActive()) {
                     tgUser.setActive(false);
@@ -272,8 +272,6 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 userMessage.saveNoteText(update);
                 tgUser.setActive(false);
             } else {
-                //по идее не имеет смысла проверять, команда или нет. Бот должен уметь работать как с командами, так и с обычными сообщениями
-//                commandList.processWrongMessages(NOT.getNameOfCommand()).executeCommand(update);
                 //default keyboard + help with commands
                 //TODO method for default keyboard
                 commandList.processWrongMessages(HELP.getNameOfCommand()).executeCommand(update);
@@ -289,9 +287,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
         }
     }
 
-
     //TODO класс для вызова дефолтной клавиатуры
-
 
     @Override
     public String getBotUsername() {
@@ -305,16 +301,15 @@ public class MyTeleBot extends TelegramLongPollingBot {
 
     //универсальный метод, который получает на вход значение коллекции и чат айди и ищет все заметки,
     // сохраненные для данной коллеции
-    //TODO как сделать так, чтобы в случае, если в данном методе ничего не было найдено, то возвращался текст "коллекция пустая"
     public void getNotesForCategory(String callbackData, String chatId) {
         SendMessage sm = new SendMessage();
         List<Note> notes = noteInterface.getAllNotes();
         List<String> values = new ArrayList<>();
         for (Note n : notes) {
             values.add(n.getCategoryName());
-//            values.add(n.getChatId().toString());
+            System.out.println(n);
         }
-        //TODO сейчас если этого значения нет в листе, то тогда не отобразиться текст для ошиюки - оптимизировать
+        System.out.println(values);
         if (values.contains(callbackData) && !notes.isEmpty()) {
             //condition: only this collection name and only for this user (based on chatId)
             for (Note note : notes) {
@@ -334,7 +329,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
         //if the list with notes is empty for this user
         else {
             sm.setChatId(chatId);
-            sm.setText("Nothing was found");
+            sm.setText("The collection "+callbackData.toUpperCase()+" is empty");
             try {
                 execute(sm);
             } catch (TelegramApiException e) {
