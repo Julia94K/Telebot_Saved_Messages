@@ -251,7 +251,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 String thisCommand = message.split(" ")[0].toLowerCase();
                 commandList.processWrongMessages(thisCommand).executeCommand(update);
                 System.out.println("command detected");
-                if (update.getMessage().getText().equals("/savecategory")||(update.getMessage().getText().equals("New collection"))) {
+                if (update.getMessage().getText().equals("/savecategory") || (update.getMessage().getText().equals("New collection"))) {
                     tgUser.setActive(true);
                     tgUser.setUserStatus(0);
                 }
@@ -279,11 +279,25 @@ public class MyTeleBot extends TelegramLongPollingBot {
         }
         //if user pressed one of the buttons
         else if (update.hasCallbackQuery()) {
-            //метод, в который передается значение callData и в зависимости от этого значения реализуется функция
             String callData = update.getCallbackQuery().getData();
             String chat_id = update.getCallbackQuery().getMessage().getChatId().toString();
-            getNotesForCategory(callData, chat_id);
-
+            //удаление категории из списка
+            List<String> updateIds = new ArrayList<>();
+            List<Note> notes = noteInterface.getAllNotes();
+            for (Note note : notes) {
+                updateIds.add(note.getUpdateId().toString());
+            }
+            System.out.println(updateIds);
+            if (updateIds.contains(callData)) {
+                for (Note n : notes) {
+                    if (n.getUpdateId().toString().equals(callData)) {
+                        noteInterface.delete(n);
+                    }
+                }
+                //метод, в который передается значение callData и в зависимости от этого значения отображается необходимая коллекция
+            } else {
+                getNotesForCategory(callData, chat_id);
+            }
         }
     }
 
@@ -301,6 +315,11 @@ public class MyTeleBot extends TelegramLongPollingBot {
 
     //универсальный метод, который получает на вход значение коллекции и чат айди и ищет все заметки,
     // сохраненные для данной коллеции
+    public void deleteCategory(String callbackData) {
+
+    }
+
+
     public void getNotesForCategory(String callbackData, String chatId) {
         SendMessage sm = new SendMessage();
         List<Note> notes = noteInterface.getAllNotes();
@@ -316,6 +335,18 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 if (callbackData.equals(note.getCategoryName()) && chatId.equals(note.getChatId().toString())) {
                     sm.setChatId(chatId);
                     sm.setText(note.getNoteText());
+                    //++
+                    InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
+                    inlineKeyboardButton1.setText("Delete");
+                    inlineKeyboardButton1.setCallbackData(note.getUpdateId().toString());
+                    System.out.println(inlineKeyboardButton1.getCallbackData());
+                    List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
+                    keyboardButtonsRow.add(inlineKeyboardButton1);
+                    List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+                    rowList.add(keyboardButtonsRow);
+                    inlineKeyboardMarkup.setKeyboard(rowList);
+                    sm.setReplyMarkup(inlineKeyboardMarkup);
+                    //++
                     System.out.println(note.getNoteText());
                     try {
                         execute(sm);
@@ -329,7 +360,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
         //if the list with notes is empty for this user
         else {
             sm.setChatId(chatId);
-            sm.setText("The collection "+callbackData.toUpperCase()+" is empty");
+            sm.setText("The collection " + callbackData.toUpperCase() + " is empty");
             try {
                 execute(sm);
             } catch (TelegramApiException e) {
