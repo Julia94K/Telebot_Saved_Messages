@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
 public class HelpCommand implements Command{
-    public static final String HELP_MSG = "✨Дотупные команды✨" +
+    public static final String HELP_MSG = "✨Available commands✨" +
             "\n" +
             "/savecategory"+
             "\n"+
