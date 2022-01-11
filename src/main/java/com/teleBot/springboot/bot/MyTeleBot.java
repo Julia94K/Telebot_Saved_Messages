@@ -289,7 +289,6 @@ public class MyTeleBot extends TelegramLongPollingBot {
             //метод для удаления заметки
             if (updateIds.contains(callData)) {
                 deleteCategory(callData, chat_id);
-
             } else {
                 //метод, в который передается значение callData и в зависимости от этого значения отображается необходимая коллекция
                 getNotesForCategory(callData, chat_id);
