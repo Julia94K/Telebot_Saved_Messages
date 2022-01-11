@@ -184,10 +184,10 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 replyKeyboardMarkup.setResizeKeyboard(true);
                 replyKeyboardMarkup.setOneTimeKeyboard(false);
                 System.out.println(message);
-                row.add("Help"); // Help
-                row.add("Collections"); // Collections
-                row2.add("New collection"); // Save note
-                row2.add("New note"); // Save collection
+                row.add("Help");
+                row.add("Collections");
+                row2.add("New collection");
+                row2.add("New note");
                 keyboard.add(row);
                 keyboard.add(row2);
                 replyKeyboardMarkup.setKeyboard(keyboard);
