@@ -31,6 +31,7 @@ Telegram bot for saved Messages
 
 In progress:
 1. Отображение InlineKeyboardButton из базы данных, а не с hardcoded values
+2. Удаление коллекций/сообщений (по кнопке delete)
 
 Backlog (future plans):
 1. Удаление коллекций/сообщений
