@@ -19,8 +19,7 @@ public class CommandList {
                        TgUserInterface tgUserInterface, NoteInterface noteInterface){
 
         //add here all commands
-
-        commandMap.put(START.getNameOfCommand(),new StartCommand(sendMessageInterface,tgUserInterface));
+        commandMap.put(START.getNameOfCommand(),new StartCommand(sendMessageInterface));
         commandMap.put(STOP.getNameOfCommand(),new StopCommand(sendMessageInterface,tgUserInterface));
         commandMap.put(HELP.getNameOfCommand(),new HelpCommand(sendMessageInterface));
         commandMap.put(NOT.getNameOfCommand(),new NotACommand(sendMessageInterface));

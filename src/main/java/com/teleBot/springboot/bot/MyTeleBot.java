@@ -65,12 +65,8 @@ public class MyTeleBot extends TelegramLongPollingBot {
     }
 
     InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-    ArrayList<KeyboardRow> keyboard = new ArrayList<KeyboardRow>();
-    InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
-
-    ReplyKeyboardMarkup replyKeyboardMarkup1 = new ReplyKeyboardMarkup();
-    List<KeyboardRow> keyboard1 = new ArrayList<>();
-    KeyboardRow row = new KeyboardRow();
+    List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
+    List<List<InlineKeyboardButton>> rowList= new ArrayList<>();
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -96,44 +92,60 @@ public class MyTeleBot extends TelegramLongPollingBot {
             }
 
             if (message.equals("/getcategories")) {
-                // || message.equals("Collections")
+                Long chat_id = update.getMessage().getChatId();
                 SendMessage sm = new SendMessage();
                 sm.setChatId(update.getMessage().getChatId().toString());
-                sm.setText("\uD83E\uDDA9 Chose one of the collections or select a command bellow: \uD83E\uDDA9");
+
 
                 List<Category> categories = categoryInterface.getAllCategories();
-                List<InlineKeyboardButton> keyboardButtonsRow_1 = new ArrayList<>();
-                InlineKeyboardButton inlineKeyboardButton_1 = new InlineKeyboardButton();
-                InlineKeyboardButton inlineKeyboardButton_2 = new InlineKeyboardButton();
-                InlineKeyboardButton inlineKeyboardButton_3 = new InlineKeyboardButton();
-                keyboardButtonsRow_1.add(inlineKeyboardButton_1);
-                keyboardButtonsRow_1.add(inlineKeyboardButton_2);
-                keyboardButtonsRow_1.add(inlineKeyboardButton_3);
 
+
+                List<InlineKeyboardButton> keyboardButtonsRow_1 = new ArrayList<>();
                 List<InlineKeyboardButton> keyboardButtonsRow_2 = new ArrayList<>();
+                List<InlineKeyboardButton> keyboardButtonsRow_3 = new ArrayList<>();
+                List<InlineKeyboardButton> keyboardButtonsRow_4 = new ArrayList<>();
+
                 List<List<InlineKeyboardButton>> rowList_new = new ArrayList<>();
                 InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
 
                 //значение кнопки постоянно перезаписывается, а нужно, чтобы в лист все время добавлялось новое
 
                 if (!categories.isEmpty()) {
+                    sm.setText("\uD83E\uDDA9 Chose one of the collections or select a command bellow: \uD83E\uDDA9");
                     for (Category category : categories) {
-//                        inlineKeyboardButton.setText(category.getCategoryName());
-//                        inlineKeyboardButton.setCallbackData(category.getCategoryName());
-                        //-----OK-----//
-//                        System.out.println(inlineKeyboardButton);
-//                        buttons.add(inlineKeyboardButton);
-//                        rowList_new.add(buttons);
-//                        inlineKeyboardMarkup.setKeyboard(rowList_new);
-//                        sm.setReplyMarkup(inlineKeyboardMarkup);
+                        if (chat_id.equals(category.getChatId())) {
+                            InlineKeyboardButton button = new InlineKeyboardButton();
+                            button.setText(category.getCategoryName());
+                            button.setCallbackData(category.getCategoryName());
+//                            keyboardButtonsRow_1.add(button);
+                            //сделать кнопки друг под другом
+                            if (keyboardButtonsRow_1.size() <= 2) {
+                                keyboardButtonsRow_1.add(button);
+                            } else if (keyboardButtonsRow_2.size() <= 2) {
+                                keyboardButtonsRow_2.add(button);
+                            } else if (keyboardButtonsRow_3.size() <= 2) {
+                                keyboardButtonsRow_3.add(button);
+                            } else {
+                                keyboardButtonsRow_4.add(button);
+                            }
+                        }
                     }
+                    rowList_new.add(keyboardButtonsRow);
+                    rowList_new.add(keyboardButtonsRow_1);
+                    rowList_new.add(keyboardButtonsRow_2);
+                    rowList_new.add(keyboardButtonsRow_3);
+                    rowList_new.add(keyboardButtonsRow_4);
+                    inlineKeyboardMarkup.setKeyboard(rowList_new);
+                    sm.setReplyMarkup(inlineKeyboardMarkup);
+
+                } else {
+                    sm.setText("You have no collections");
                 }
-//                }
-//                try {
-//                    execute(sm);
-//                } catch (TelegramApiException e) {
-//                    e.printStackTrace();
-//                }
+                try {
+                    execute(sm);
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
                 //hardcoded values for buttons
                 InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
                 InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
@@ -308,7 +320,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
         return token;
     }
 
-//удаляем конкретную заметку
+    //удаляем конкретную заметку
     public void deleteCategory(String callbackData, String chatId) {
 
         List<Note> notes = noteInterface.getAllNotes();

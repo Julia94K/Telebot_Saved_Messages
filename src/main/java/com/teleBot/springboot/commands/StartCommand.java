@@ -17,11 +17,10 @@ public class StartCommand implements Command {
     ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
     public static final String START_MSG = "Hello let's start!";
     private final SendMessageInterface sendMessageInterface;
-    private final TgUserInterface tgUserInterface;
 
-    public StartCommand(SendMessageInterface sendMessageInterface, TgUserInterface tgUserInterface) {
+
+    public StartCommand(SendMessageInterface sendMessageInterface) {
         this.sendMessageInterface = sendMessageInterface;
-        this.tgUserInterface = tgUserInterface;
     }
 
     @Override
