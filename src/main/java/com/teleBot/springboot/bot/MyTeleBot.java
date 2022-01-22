@@ -108,10 +108,9 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 List<List<InlineKeyboardButton>> rowList_new = new ArrayList<>();
                 InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
 
-                //значение кнопки постоянно перезаписывается, а нужно, чтобы в лист все время добавлялось новое
 
                 if (!categories.isEmpty()) {
-                    sm.setText("\uD83E\uDDA9 Chose one of the collections or select a command bellow: \uD83E\uDDA9");
+                    sm.setText("\uD83E\uDDA9 Chose one of the collections: \uD83E\uDDA9");
                     for (Category category : categories) {
                         if (chat_id.equals(category.getChatId())) {
                             InlineKeyboardButton button = new InlineKeyboardButton();
@@ -147,42 +146,42 @@ public class MyTeleBot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
                 //hardcoded values for buttons
-                InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
-                InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
-                InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
-                InlineKeyboardButton inlineKeyboardButton4 = new InlineKeyboardButton();
-                InlineKeyboardButton inlineKeyboardButton5 = new InlineKeyboardButton();
-                InlineKeyboardButton inlineKeyboardButton6 = new InlineKeyboardButton();
-                inlineKeyboardButton1.setText("Education");
-                inlineKeyboardButton2.setText("Travel");
-                inlineKeyboardButton3.setText("Work");
-                inlineKeyboardButton4.setText("Shopping");
-                inlineKeyboardButton5.setText("Restaurants");
-                inlineKeyboardButton6.setText("Movies");
-                inlineKeyboardButton1.setCallbackData("Education");
-                inlineKeyboardButton2.setCallbackData("Travel");
-                inlineKeyboardButton3.setCallbackData("Work");
-                inlineKeyboardButton4.setCallbackData("Shopping");
-                inlineKeyboardButton5.setCallbackData("Restaurants");
-                inlineKeyboardButton6.setCallbackData("Movies");
-                List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
-                List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
-                keyboardButtonsRow1.add(inlineKeyboardButton1);
-                keyboardButtonsRow1.add(inlineKeyboardButton2);
-                keyboardButtonsRow1.add(inlineKeyboardButton3);
-                keyboardButtonsRow2.add(inlineKeyboardButton4);
-                keyboardButtonsRow2.add(inlineKeyboardButton5);
-                keyboardButtonsRow2.add(inlineKeyboardButton6);
-                List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-                rowList.add(keyboardButtonsRow1);
-                rowList.add(keyboardButtonsRow2);
-                inlineKeyboardMarkup.setKeyboard(rowList);
-                sm.setReplyMarkup(inlineKeyboardMarkup);
-                try {
-                    execute(sm);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
+//                InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
+//                InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
+//                InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
+//                InlineKeyboardButton inlineKeyboardButton4 = new InlineKeyboardButton();
+//                InlineKeyboardButton inlineKeyboardButton5 = new InlineKeyboardButton();
+//                InlineKeyboardButton inlineKeyboardButton6 = new InlineKeyboardButton();
+//                inlineKeyboardButton1.setText("Education");
+//                inlineKeyboardButton2.setText("Travel");
+//                inlineKeyboardButton3.setText("Work");
+//                inlineKeyboardButton4.setText("Shopping");
+//                inlineKeyboardButton5.setText("Restaurants");
+//                inlineKeyboardButton6.setText("Movies");
+//                inlineKeyboardButton1.setCallbackData("Education");
+//                inlineKeyboardButton2.setCallbackData("Travel");
+//                inlineKeyboardButton3.setCallbackData("Work");
+//                inlineKeyboardButton4.setCallbackData("Shopping");
+//                inlineKeyboardButton5.setCallbackData("Restaurants");
+//                inlineKeyboardButton6.setCallbackData("Movies");
+//                List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
+//                List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
+//                keyboardButtonsRow1.add(inlineKeyboardButton1);
+//                keyboardButtonsRow1.add(inlineKeyboardButton2);
+//                keyboardButtonsRow1.add(inlineKeyboardButton3);
+//                keyboardButtonsRow2.add(inlineKeyboardButton4);
+//                keyboardButtonsRow2.add(inlineKeyboardButton5);
+//                keyboardButtonsRow2.add(inlineKeyboardButton6);
+//                List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+//                rowList.add(keyboardButtonsRow1);
+//                rowList.add(keyboardButtonsRow2);
+//                inlineKeyboardMarkup.setKeyboard(rowList);
+//                sm.setReplyMarkup(inlineKeyboardMarkup);
+//                try {
+//                    execute(sm);
+//                } catch (TelegramApiException e) {
+//                    e.printStackTrace();
+//                }
             }
             if (message.equals("/start") || message.equals("Home \uD83C\uDFE0")) {
                 System.out.println(message);
@@ -347,8 +346,10 @@ public class MyTeleBot extends TelegramLongPollingBot {
         List<Note> notes = noteInterface.getAllNotes();
         List<String> values = new ArrayList<>();
         for (Note n : notes) {
-            values.add(n.getCategoryName());
-            System.out.println(n);
+            if(chatId.equals(n.getChatId().toString())){
+                values.add(n.getCategoryName());
+                System.out.println(n);
+            }
         }
         System.out.println(values);
         if (values.contains(callbackData) && !notes.isEmpty()) {
@@ -377,7 +378,6 @@ public class MyTeleBot extends TelegramLongPollingBot {
                     }
                 }
             }
-
         }
         //if the list with notes is empty for this user
         else {
