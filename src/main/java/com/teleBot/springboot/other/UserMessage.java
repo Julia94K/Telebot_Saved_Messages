@@ -44,7 +44,6 @@ public class UserMessage implements User {
     @Override
 
     //сохранение категории в БД
-    //TODO проверка на уникальность
     public void proceedSimpleMessage(Update update) {
 
         String text = update.getMessage().getText();

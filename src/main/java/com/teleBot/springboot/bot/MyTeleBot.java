@@ -1,9 +1,6 @@
 package com.teleBot.springboot.bot;
 
-import com.teleBot.springboot.commands.Command;
 import com.teleBot.springboot.commands.CommandList;
-import com.teleBot.springboot.commands.HelpCommand;
-import com.teleBot.springboot.commands.SaveNoteCommand;
 import com.teleBot.springboot.functions.*;
 import com.teleBot.springboot.other.UserMessage;
 import com.teleBot.springboot.repository.entity.Category;
@@ -14,8 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -23,10 +18,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.teleBot.springboot.commands.NameOfCommand.*;
@@ -71,138 +63,18 @@ public class MyTeleBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            String message = update.getMessage().getText().trim();
-            //заменить обычные слова на команды
-            switch (message) {
-                case "Help":
-                    message = "/help";
-                    break;
-                case "Home":
-                    message = "/start";
-                    break;
-                case "Collections":
-                    message = "/getcategories";
-                    break;
-                case "New collection":
-                    message = "/savecategory";
-                    break;
-                case "New note":
-                    message = "/savenote";
-                    break;
-            }
-
+            String message = handleString(update);
             if (message.equals("/getcategories")) {
-                Long chat_id = update.getMessage().getChatId();
-                SendMessage sm = new SendMessage();
-                sm.setChatId(update.getMessage().getChatId().toString());
 
-
-                List<Category> categories = categoryInterface.getAllCategories();
-
-
-                List<InlineKeyboardButton> keyboardButtonsRow_1 = new ArrayList<>();
-                List<InlineKeyboardButton> keyboardButtonsRow_2 = new ArrayList<>();
-                List<InlineKeyboardButton> keyboardButtonsRow_3 = new ArrayList<>();
-                List<InlineKeyboardButton> keyboardButtonsRow_4 = new ArrayList<>();
-
-                List<List<InlineKeyboardButton>> rowList_new = new ArrayList<>();
-                InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
-
-
-                if (!categories.isEmpty()) {
-                    sm.setText("\uD83E\uDDA9 Chose one of the collections: \uD83E\uDDA9");
-                    for (Category category : categories) {
-                        if (chat_id.equals(category.getChatId())) {
-                            InlineKeyboardButton button = new InlineKeyboardButton();
-                            button.setText(category.getCategoryName());
-                            button.setCallbackData(category.getCategoryName());
-//                            keyboardButtonsRow_1.add(button);
-                            //сделать кнопки друг под другом
-                            if (keyboardButtonsRow_1.size() <= 2) {
-                                keyboardButtonsRow_1.add(button);
-                            } else if (keyboardButtonsRow_2.size() <= 2) {
-                                keyboardButtonsRow_2.add(button);
-                            } else if (keyboardButtonsRow_3.size() <= 2) {
-                                keyboardButtonsRow_3.add(button);
-                            } else {
-                                keyboardButtonsRow_4.add(button);
-                            }
-                        }
-                    }
-                    rowList_new.add(keyboardButtonsRow);
-                    rowList_new.add(keyboardButtonsRow_1);
-                    rowList_new.add(keyboardButtonsRow_2);
-                    rowList_new.add(keyboardButtonsRow_3);
-                    rowList_new.add(keyboardButtonsRow_4);
-                    inlineKeyboardMarkup.setKeyboard(rowList_new);
-                    sm.setReplyMarkup(inlineKeyboardMarkup);
-
-                } else {
-                    sm.setText("You have no collections");
-                }
+                SendMessage sm = getSendMessageCaterories(update);
                 try {
                     execute(sm);
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
-                //hardcoded values for buttons
-//                InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
-//                InlineKeyboardButton inlineKeyboardButton2 = new InlineKeyboardButton();
-//                InlineKeyboardButton inlineKeyboardButton3 = new InlineKeyboardButton();
-//                InlineKeyboardButton inlineKeyboardButton4 = new InlineKeyboardButton();
-//                InlineKeyboardButton inlineKeyboardButton5 = new InlineKeyboardButton();
-//                InlineKeyboardButton inlineKeyboardButton6 = new InlineKeyboardButton();
-//                inlineKeyboardButton1.setText("Education");
-//                inlineKeyboardButton2.setText("Travel");
-//                inlineKeyboardButton3.setText("Work");
-//                inlineKeyboardButton4.setText("Shopping");
-//                inlineKeyboardButton5.setText("Restaurants");
-//                inlineKeyboardButton6.setText("Movies");
-//                inlineKeyboardButton1.setCallbackData("Education");
-//                inlineKeyboardButton2.setCallbackData("Travel");
-//                inlineKeyboardButton3.setCallbackData("Work");
-//                inlineKeyboardButton4.setCallbackData("Shopping");
-//                inlineKeyboardButton5.setCallbackData("Restaurants");
-//                inlineKeyboardButton6.setCallbackData("Movies");
-//                List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
-//                List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
-//                keyboardButtonsRow1.add(inlineKeyboardButton1);
-//                keyboardButtonsRow1.add(inlineKeyboardButton2);
-//                keyboardButtonsRow1.add(inlineKeyboardButton3);
-//                keyboardButtonsRow2.add(inlineKeyboardButton4);
-//                keyboardButtonsRow2.add(inlineKeyboardButton5);
-//                keyboardButtonsRow2.add(inlineKeyboardButton6);
-//                List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-//                rowList.add(keyboardButtonsRow1);
-//                rowList.add(keyboardButtonsRow2);
-//                inlineKeyboardMarkup.setKeyboard(rowList);
-//                sm.setReplyMarkup(inlineKeyboardMarkup);
-//                try {
-//                    execute(sm);
-//                } catch (TelegramApiException e) {
-//                    e.printStackTrace();
-//                }
             }
-            if (message.equals("/start") || message.equals("Home \uD83C\uDFE0")) {
-                System.out.println(message);
-                SendMessage sm = new SendMessage();
-                sm.setChatId(update.getMessage().getChatId().toString());
-                sm.setText("Choose one the options bellow");
-                List<KeyboardRow> keyboard = new ArrayList<>();
-                KeyboardRow row = new KeyboardRow();
-                KeyboardRow row2 = new KeyboardRow();
-                replyKeyboardMarkup.setSelective(true);
-                replyKeyboardMarkup.setResizeKeyboard(true);
-                replyKeyboardMarkup.setOneTimeKeyboard(false);
-                System.out.println(message);
-                row.add("Help");
-                row.add("Collections");
-                row2.add("New collection");
-                row2.add("New note");
-                keyboard.add(row);
-                keyboard.add(row2);
-                replyKeyboardMarkup.setKeyboard(keyboard);
-                sm.setReplyMarkup(replyKeyboardMarkup);
+            if (message.equals("/start")) {
+                SendMessage sm = getSendMessageStart(update);
                 try {
                     execute(sm);
                 } catch (TelegramApiException e) {
@@ -210,82 +82,10 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 }
             }
             if (message.equals("Create note") || message.equals("/savenote")) {
-                Long chat_id = update.getMessage().getChatId();
-                List<Category> categories = categoryInterface.getAllCategories();
-                List<KeyboardRow> keyboard = new ArrayList<>();
-                KeyboardRow row1 = new KeyboardRow();
-                KeyboardRow row2 = new KeyboardRow();
-                KeyboardRow row3 = new KeyboardRow();
-                KeyboardRow row4 = new KeyboardRow();
-
-                replyKeyboardMarkup.setSelective(true);
-                replyKeyboardMarkup.setResizeKeyboard(true);
-                replyKeyboardMarkup.setOneTimeKeyboard(false);
-
-                //тут код, чтобы отобразить категории из базы в виде кнопок меню
-                if (!categories.isEmpty()) {
-                    for (Category category : categories) {
-                        if (chat_id.equals(category.getChatId())) {
-                            if (row1.size() <= 3) {
-                                row1.add(category.getCategoryName());
-                            } else if (row2.size() <= 3) {
-                                row2.add(category.getCategoryName());
-                            } else {
-                                row3.add(category.getCategoryName());
-                            }
-                        }
-                    }
-                    row4.add("Home");
-                    keyboard.add(row1);
-                    keyboard.add(row2);
-                    keyboard.add(row3);
-                    keyboard.add(row4);
-                    replyKeyboardMarkup.setKeyboard(keyboard);
-                    SendMessage sm = new SendMessage();
-                    sm.setChatId(update.getMessage().getChatId().toString());
-                    sm.setText("Chose one of the collections");
-                    sm.setReplyMarkup(replyKeyboardMarkup);
-                    try {
-                        execute(sm);
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                }
+                sendMessageCreate(update);
             }
 
-            //обработка команд
-            if (message.startsWith(PREFIX)) {
-                if (tgUser.isActive()) {
-                    tgUser.setActive(false);
-                }
-                String thisCommand = message.split(" ")[0].toLowerCase();
-                commandList.processWrongMessages(thisCommand).executeCommand(update);
-                System.out.println("command detected");
-                if (update.getMessage().getText().equals("/savecategory") || (update.getMessage().getText().equals("New collection"))) {
-                    tgUser.setActive(true);
-                    tgUser.setUserStatus(0);
-                }
-                if (update.getMessage().getText().equals("/savenote") || update.getMessage().getText().equals("New note")) {
-                    tgUser.setActive(true);
-                    tgUser.setUserStatus(1);
-                }
-            }
-
-            //обработка простых сообщений от пользователя (когда ожидается ввод)
-            else if (tgUser.isActive() && tgUser.getUserStatus().equals(0)) {
-                userMessage.proceedSimpleMessage(update);
-                tgUser.setActive(false);
-            } else if (tgUser.isActive() && tgUser.getUserStatus().equals(1)) {
-                userMessage.proceedNote(update);
-                tgUser.setUserStatus(2);
-            } else if (tgUser.isActive() && tgUser.getUserStatus().equals(2)) {
-                userMessage.saveNoteText(update);
-                tgUser.setActive(false);
-            } else {
-                //default keyboard + help with commands
-                //TODO method for default keyboard
-                commandList.processWrongMessages(HELP.getNameOfCommand()).executeCommand(update);
-            }
+            updateUserStatus(update, message);
         }
         //if user pressed one of the buttons
         else if (update.hasCallbackQuery()) {
@@ -305,6 +105,183 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 getNotesForCategory(callData, chat_id);
             }
         }
+    }
+
+    private void sendMessageCreate(Update update) {
+        Long chat_id = update.getMessage().getChatId();
+        List<Category> categories = categoryInterface.getAllCategories();
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        KeyboardRow row1 = new KeyboardRow();
+        KeyboardRow row2 = new KeyboardRow();
+        KeyboardRow row3 = new KeyboardRow();
+        KeyboardRow row4 = new KeyboardRow();
+
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+
+        //тут код, чтобы отобразить категории из базы в виде кнопок меню
+        if (!categories.isEmpty()) {
+            for (Category category : categories) {
+                if (chat_id.equals(category.getChatId())) {
+                    if (row1.size() <= 3) {
+                        row1.add(category.getCategoryName());
+                    } else if (row2.size() <= 3) {
+                        row2.add(category.getCategoryName());
+                    } else {
+                        row3.add(category.getCategoryName());
+                    }
+                }
+            }
+            row4.add("Home");
+            keyboard.add(row1);
+            keyboard.add(row2);
+            keyboard.add(row3);
+            keyboard.add(row4);
+            replyKeyboardMarkup.setKeyboard(keyboard);
+            SendMessage sm = new SendMessage();
+            sm.setChatId(update.getMessage().getChatId().toString());
+            sm.setText("Chose one of the collections");
+            sm.setReplyMarkup(replyKeyboardMarkup);
+            try {
+                execute(sm);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private String handleString(Update update) {
+        String message = update.getMessage().getText().trim();
+        //заменить обычные слова на команды
+        switch (message) {
+            case "Help":
+                message = "/help";
+                break;
+            case "Home":
+                message = "/start";
+                break;
+            case "Collections":
+                message = "/getcategories";
+                break;
+            case "New collection":
+                message = "/savecategory";
+                break;
+            case "New note":
+                message = "/savenote";
+                break;
+        }
+        return message;
+    }
+
+    private void updateUserStatus(Update update, String message) {
+        //обработка команд
+        if (message.startsWith(PREFIX)) {
+            if (tgUser.isActive()) {
+                tgUser.setActive(false);
+            }
+            String thisCommand = message.split(" ")[0].toLowerCase();
+            commandList.processWrongMessages(thisCommand).executeCommand(update);
+            System.out.println("command detected");
+            if (update.getMessage().getText().equals("/savecategory") || (update.getMessage().getText().equals("New collection"))) {
+                tgUser.setActive(true);
+                tgUser.setUserStatus(0);
+            }
+            if (update.getMessage().getText().equals("/savenote") || update.getMessage().getText().equals("New note")) {
+                tgUser.setActive(true);
+                tgUser.setUserStatus(1);
+            }
+        }
+
+        //обработка простых сообщений от пользователя (когда ожидается ввод)
+        else if (tgUser.isActive() && tgUser.getUserStatus().equals(0)) {
+            userMessage.proceedSimpleMessage(update);
+            tgUser.setActive(false);
+        } else if (tgUser.isActive() && tgUser.getUserStatus().equals(1)) {
+            userMessage.proceedNote(update);
+            tgUser.setUserStatus(2);
+        } else if (tgUser.isActive() && tgUser.getUserStatus().equals(2)) {
+            userMessage.saveNoteText(update);
+            tgUser.setActive(false);
+        } else {
+            //default keyboard + help with commands
+            //TODO method for default keyboard
+            commandList.processWrongMessages(HELP.getNameOfCommand()).executeCommand(update);
+        }
+    }
+
+    private SendMessage getSendMessageStart(Update update) {
+        SendMessage sm = new SendMessage();
+        sm.setChatId(update.getMessage().getChatId().toString());
+        sm.setText("Choose one the options bellow");
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        KeyboardRow row = new KeyboardRow();
+        KeyboardRow row2 = new KeyboardRow();
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+        row.add("Help");
+        row.add("Collections");
+        row2.add("New collection");
+        row2.add("New note");
+        keyboard.add(row);
+        keyboard.add(row2);
+        replyKeyboardMarkup.setKeyboard(keyboard);
+        sm.setReplyMarkup(replyKeyboardMarkup);
+        return sm;
+    }
+
+    private SendMessage getSendMessageCaterories(Update update) {
+        Long chat_id = update.getMessage().getChatId();
+        SendMessage sm = new SendMessage();
+        sm.setChatId(update.getMessage().getChatId().toString());
+
+
+        List<Category> categories = categoryInterface.getAllCategories();
+
+
+        List<InlineKeyboardButton> keyboardButtonsRow_1 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardButtonsRow_2 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardButtonsRow_3 = new ArrayList<>();
+        List<InlineKeyboardButton> keyboardButtonsRow_4 = new ArrayList<>();
+
+        List<List<InlineKeyboardButton>> rowList_new = new ArrayList<>();
+        InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
+
+
+        if (!categories.isEmpty()) {
+            sm.setText("\uD83E\uDDA9 Chose one of the collections: \uD83E\uDDA9");
+            for (Category category : categories) {
+                if (chat_id.equals(category.getChatId())) {
+                    InlineKeyboardButton button = new InlineKeyboardButton();
+                    button.setText(category.getCategoryName());
+                    button.setCallbackData(category.getCategoryName());
+//                            keyboardButtonsRow_1.add(button);
+                    //сделать кнопки друг под другом
+                    if (keyboardButtonsRow_1.size() <= 2) {
+                        keyboardButtonsRow_1.add(button);
+                    } else if (keyboardButtonsRow_2.size() <= 2) {
+                        keyboardButtonsRow_2.add(button);
+                    } else if (keyboardButtonsRow_3.size() <= 2) {
+                        keyboardButtonsRow_3.add(button);
+                    } else {
+                        keyboardButtonsRow_4.add(button);
+                    }
+                }
+            }
+            rowList_new.add(keyboardButtonsRow);
+            rowList_new.add(keyboardButtonsRow_1);
+            rowList_new.add(keyboardButtonsRow_2);
+            rowList_new.add(keyboardButtonsRow_3);
+            rowList_new.add(keyboardButtonsRow_4);
+            inlineKeyboardMarkup.setKeyboard(rowList_new);
+
+            sm.setReplyMarkup(inlineKeyboardMarkup);
+
+        } else {
+            sm.setText("You have no collections");
+        }
+        return sm;
     }
 
     //TODO класс для вызова дефолтной клавиатуры

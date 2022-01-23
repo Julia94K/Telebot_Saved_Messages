@@ -17,6 +17,8 @@ import java.util.function.Consumer;
 
 public class SendMessageFunction implements SendMessageInterface {
     private final MyTeleBot myTeleBot;
+    InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+
 
     public SendMessageFunction(MyTeleBot myTeleBot) {
         this.myTeleBot = myTeleBot;
@@ -27,6 +29,7 @@ public class SendMessageFunction implements SendMessageInterface {
         SendMessage sm = new SendMessage();
         sm.setChatId(chatId);
         sm.setText(message);
+//        sm.setReplyMarkup(inlineKeyboardMarkup);
 
         //обработка исключений
         try {
