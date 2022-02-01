@@ -8,6 +8,11 @@ import com.teleBot.springboot.repository.entity.Category;
 import com.teleBot.springboot.repository.entity.Note;
 import com.teleBot.springboot.repository.entity.TgUser;
 import org.springframework.data.relational.core.sql.In;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.Document;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -119,6 +124,19 @@ public class UserMessage implements User {
         }
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), "This note was added");
     }
+
+//    public void saveFile(Update update){
+//        Document docu = update.getMessage().getDocument();
+//        Note note = new Note();
+////        note.setDocument(docu);
+//        noteInterface.save(note);
+//        sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), "This document was added");
+//    }
+
+//    public void savePicture(Update update){
+//        PhotoSize photo = update.getMessage().getPhoto();
+//
+//    }
 }
 
 

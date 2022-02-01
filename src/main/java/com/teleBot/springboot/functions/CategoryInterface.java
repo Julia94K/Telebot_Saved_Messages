@@ -11,6 +11,8 @@ public interface CategoryInterface {
 
     void save (Category category);
 
+    void delete (Category category);
+
 
     List<Category> getAllCategories();
 

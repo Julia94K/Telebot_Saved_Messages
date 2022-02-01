@@ -1,8 +1,12 @@
 package com.teleBot.springboot.repository.entity;
 
 import lombok.Data;
+import org.telegram.telegrambots.meta.api.objects.Document;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 
 import javax.persistence.*;
+import javax.swing.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -22,17 +26,11 @@ public class Note {
     private String categoryName;
 
 
-//    @ManyToOne
-//    @JoinColumn (name="note_collection")
-//    private Category collectionName;
-
-//    @Column(name = "note_name")
-//    private String noteName;
-
-
     //пока упрощенно добавляем только возможность сохранять текст в БД
     @Column(name="note_text")
     private String noteText;
+
+
 
     public Integer getUpdateId() {
         return updateId;

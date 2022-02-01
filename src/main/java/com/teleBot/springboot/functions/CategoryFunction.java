@@ -34,6 +34,11 @@ public class CategoryFunction implements CategoryInterface {
         categoriesRepository.save(category);
     }
 
+    @Override
+    public void delete (Category category){
+        categoriesRepository.delete(category);
+    }
+
     //получение из БД списка всех категорий. Переписать этот метод так, чтобы он возвращал только имена категорий
     //step 2: имена категорий возвращаются в виде кликабельных кнопок
 
