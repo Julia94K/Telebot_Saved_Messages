@@ -13,7 +13,6 @@ public interface CategoryInterface {
 
     void delete (Category category);
 
-
     List<Category> getAllCategories();
 
 }

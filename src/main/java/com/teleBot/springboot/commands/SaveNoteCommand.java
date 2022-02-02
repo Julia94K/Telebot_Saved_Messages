@@ -18,52 +18,18 @@ import java.util.List;
 
 public class SaveNoteCommand implements Command {
 
-    private static InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
-
-    ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
     String ADD_NOTE = "Select a category:";
     private final SendMessageInterface sendMessageInterface;
-    private final NoteInterface noteInterface;
-    private final CategoryInterface categoryInterface;
 
-    public SaveNoteCommand(SendMessageInterface sendMessageInterface, NoteInterface noteInterface,
-                           CategoryInterface categoryInterface) {
+
+    public SaveNoteCommand(SendMessageInterface sendMessageInterface) {
         this.sendMessageInterface = sendMessageInterface;
-        this.noteInterface = noteInterface;
-        this.categoryInterface = categoryInterface;
     }
 
 
     @Override
     public void executeCommand(Update update){
-        SendMessage sm = new SendMessage();
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), ADD_NOTE);
-//        Long chat_id = update.getMessage().getChatId();
-//        List<Category> categories = categoryInterface.getAllCategories();
-//        List<KeyboardRow> keyboard = new ArrayList<>();
-//        KeyboardRow row1 = new KeyboardRow();
-//        KeyboardRow row2 = new KeyboardRow();
-//        KeyboardRow row3 = new KeyboardRow();
-//        replyKeyboardMarkup.setSelective(true);
-//        replyKeyboardMarkup.setResizeKeyboard(true);
-//        replyKeyboardMarkup.setOneTimeKeyboard(false);
-//        if (!categories.isEmpty()) {
-//            for (Category category : categories) {
-//                if (chat_id.equals(category.getChatId())) {
-//                    if (row1.size() <= 3) {
-//                        row1.add(category.getCategoryName());
-//                    } else if (row2.size() <= 3) {
-//                        row2.add(category.getCategoryName());
-//                    } else {
-//                        row3.add(category.getCategoryName());
-//                    }
-//                }
-//            }
-//            keyboard.add(row1);
-//            keyboard.add(row2);
-//            keyboard.add(row3);
-//            replyKeyboardMarkup.setKeyboard(keyboard);
-
 
         //обработка команлды происходит в классе UserMessage
     }

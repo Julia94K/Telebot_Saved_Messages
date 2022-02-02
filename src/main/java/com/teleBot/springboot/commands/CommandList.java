@@ -15,19 +15,21 @@ public class CommandList {
 
 
 //добавлен второй аргумент
-    public CommandList(SendMessageInterface sendMessageInterface, CategoryInterface categoryInterface,
-                       TgUserInterface tgUserInterface, NoteInterface noteInterface){
+    public CommandList(SendMessageInterface sendMessageInterface, TgUserInterface tgUserInterface, CategoryInterface categoryInterface,
+                       NoteInterface noteInterface){
 
         //add here all commands
         commandMap.put(START.getNameOfCommand(),new StartCommand(sendMessageInterface));
-        commandMap.put(STOP.getNameOfCommand(),new StopCommand(sendMessageInterface,tgUserInterface));
+//        commandMap.put(STOP.getNameOfCommand(),new StopCommand(sendMessageInterface,tgUserInterface));
         commandMap.put(HELP.getNameOfCommand(),new HelpCommand(sendMessageInterface));
         commandMap.put(NOT.getNameOfCommand(),new NotACommand(sendMessageInterface));
         commandMap.put(GET_CATEGORY.getNameOfCommand(),new GetCategoriesCommand(sendMessageInterface,categoryInterface));
         commandMap.put(SAVE_CATEGORY.getNameOfCommand(),new SaveNewCategoryCommand(sendMessageInterface,categoryInterface));
-        commandMap.put(SAVE_NOTE.getNameOfCommand(),new SaveNoteCommand(sendMessageInterface,noteInterface,categoryInterface));
-        commandMap.put(SAVE_NOTE_TEXT.getNameOfCommand(),new SaveNoteCommand(sendMessageInterface,noteInterface,categoryInterface));
+        commandMap.put(SAVE_NOTE.getNameOfCommand(),new SaveNoteCommand(sendMessageInterface));
+//        commandMap.put(SAVE_NOTE_TEXT.getNameOfCommand(),new SaveNoteCommand(sendMessageInterface));
         commandMap.put(GET_NOTE.getNameOfCommand(),new GetNotesForCategoryCommand(sendMessageInterface,categoryInterface,noteInterface));
+        commandMap.put(DOCUMENT.getNameOfCommand(),new SaveDocuCommand(sendMessageInterface));
+        commandMap.put(PICTURE.getNameOfCommand(),new SavePictureCommand(sendMessageInterface));
         unknownCommand = new UnknownCommand(sendMessageInterface);
 
 

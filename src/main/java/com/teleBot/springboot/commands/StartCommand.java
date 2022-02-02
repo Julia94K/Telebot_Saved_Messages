@@ -14,8 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StartCommand implements Command {
-    ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-    public static final String START_MSG = "Hello let's start!";
+    public static final String START_MSG = "Main menu:";
     private final SendMessageInterface sendMessageInterface;
 
 

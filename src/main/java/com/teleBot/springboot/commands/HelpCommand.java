@@ -14,9 +14,12 @@ public class HelpCommand implements Command{
             "\n"+
             "/savenote"+
             "\n"+
-            "/getnotes"+
+            "/help"+
             "\n"+
-            "/help";
+            "/savedocument"+
+            "\n"+
+            "/savepicture";
+
     private final SendMessageInterface sendMessageInterface;
 
     public HelpCommand (SendMessageInterface sendMessageInterface) {
