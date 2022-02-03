@@ -17,9 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class UserMessage implements User {
 
@@ -98,6 +96,7 @@ public class UserMessage implements User {
         note.setCategoryName(text);
         note.setUpdateId(updateId);
         note.setChatId(chatId);
+
 //        note.setNoteText(chatId.toString());
         noteInterface.save(note);
         sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(), "Add the text of the note");
@@ -112,8 +111,6 @@ public class UserMessage implements User {
 
     public void saveNoteText(Update update) {
         String text = update.getMessage().getText();
-        //нужно найти строчку, в которой текст пустой и записать в нее
-        //try catch?
         String chatId = update.getMessage().getChatId().toString();
         List<Note> notes = noteInterface.getAllNotes();
         for (Note note : notes) {

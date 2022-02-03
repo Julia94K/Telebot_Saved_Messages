@@ -23,9 +23,10 @@ public class CommandList {
 //        commandMap.put(STOP.getNameOfCommand(),new StopCommand(sendMessageInterface,tgUserInterface));
         commandMap.put(HELP.getNameOfCommand(),new HelpCommand(sendMessageInterface));
         commandMap.put(NOT.getNameOfCommand(),new NotACommand(sendMessageInterface));
-        commandMap.put(GET_CATEGORY.getNameOfCommand(),new GetCategoriesCommand(sendMessageInterface,categoryInterface));
+        commandMap.put(GET_CATEGORY.getNameOfCommand(),new GetCategoriesCommand(sendMessageInterface));
         commandMap.put(SAVE_CATEGORY.getNameOfCommand(),new SaveNewCategoryCommand(sendMessageInterface,categoryInterface));
         commandMap.put(SAVE_NOTE.getNameOfCommand(),new SaveNoteCommand(sendMessageInterface));
+        commandMap.put(DELETE.getNameOfCommand(),new DeleteCollectionCommand(sendMessageInterface));
 //        commandMap.put(SAVE_NOTE_TEXT.getNameOfCommand(),new SaveNoteCommand(sendMessageInterface));
         commandMap.put(GET_NOTE.getNameOfCommand(),new GetNotesForCategoryCommand(sendMessageInterface,categoryInterface,noteInterface));
         commandMap.put(DOCUMENT.getNameOfCommand(),new SaveDocuCommand(sendMessageInterface));

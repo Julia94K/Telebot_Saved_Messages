@@ -56,7 +56,6 @@ public class MyTeleBot extends TelegramLongPollingBot {
                      CategoryInterface categoryInterface, NoteInterface noteInterface, PictureInterface pictureInterface,
                      DocumentInterface documentInterface) {
         this.commandList = new CommandList(new SendMessageFunction(this), tgUserInterface, addCategoryFunction, noteFunction);
-        //++
         this.tgUser = new TgUser();
         this.userMessage = new UserMessage(new SendMessageFunction(this), addCategoryFunction, noteFunction);
         this.category = new Category();
@@ -69,7 +68,6 @@ public class MyTeleBot extends TelegramLongPollingBot {
 
     InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
     List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
-    List<List<InlineKeyboardButton>> rowList= new ArrayList<>();
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -83,7 +81,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
-            if(message.equals("Delete collection")){
+            if(message.equals("/deletecollection")){
                 SendMessage sm = prepareCategoriesToDelete(update);
                 try {
                     execute(sm);
@@ -92,20 +90,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 }
             }
             if(message.equals("Pictures \uD83D\uDDBC")){
-                SendMessage sm = new SendMessage();
-                sm.setChatId(update.getMessage().getChatId().toString());
-                sm.setText("Choose one the options bellow");
-                List<KeyboardRow> keyboard = new ArrayList<>();
-                KeyboardRow row = new KeyboardRow();
-                replyKeyboardMarkup.setSelective(true);
-                replyKeyboardMarkup.setResizeKeyboard(true);
-                replyKeyboardMarkup.setOneTimeKeyboard(false);
-                row.add("New picture");
-                row.add("Saved pictures");
-                row.add("Home");
-                keyboard.add(row);
-                replyKeyboardMarkup.setKeyboard(keyboard);
-                sm.setReplyMarkup(replyKeyboardMarkup);
+                SendMessage sm = getPictures(update);
                 try {
                     execute(sm);
                 } catch (TelegramApiException e) {
@@ -113,20 +98,7 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 }
             }
             if(message.equals("Documents \uD83D\uDCDA")){
-                SendMessage sm = new SendMessage();
-                sm.setChatId(update.getMessage().getChatId().toString());
-                sm.setText("Choose one the options bellow:");
-                List<KeyboardRow> keyboard = new ArrayList<>();
-                KeyboardRow row = new KeyboardRow();
-                replyKeyboardMarkup.setSelective(true);
-                replyKeyboardMarkup.setResizeKeyboard(true);
-                replyKeyboardMarkup.setOneTimeKeyboard(false);
-                row.add("New document");
-                row.add("Saved documents");
-                row.add("Home");
-                keyboard.add(row);
-                replyKeyboardMarkup.setKeyboard(keyboard);
-                sm.setReplyMarkup(replyKeyboardMarkup);
+                SendMessage sm = getDocuments(update);
                 try {
                     execute(sm);
                 } catch (TelegramApiException e) {
@@ -138,7 +110,6 @@ public class MyTeleBot extends TelegramLongPollingBot {
                 showDocuments(update, sendDocument);
             }
             if(message.equals("Saved pictures")){
-                System.out.println("test");
                 SendPhoto sendPhoto = new SendPhoto();
                 showPictures(update, sendPhoto);
             }
@@ -156,11 +127,11 @@ public class MyTeleBot extends TelegramLongPollingBot {
             updateUserStatus(update, message);
         }
         //метод для загрузки документа в БД
-        else if(update.hasMessage()&&update.getMessage().hasDocument()){
+        else if(update.hasMessage()&&update.getMessage().hasDocument()&&tgUser.getUserStatus().equals(0)){
             saveDocument(update);
         }
         //метод для загрузки фото/картинок в БД
-        else if(update.hasMessage()&&update.getMessage().hasPhoto()){
+        else if(update.hasMessage()&&update.getMessage().hasPhoto()&&tgUser.getUserStatus().equals(0)){
             savePicture(update);
         }
         //if user pressed one of the buttons
@@ -204,11 +175,45 @@ public class MyTeleBot extends TelegramLongPollingBot {
         }
     }
 
+    private SendMessage getPictures(Update update) {
+        SendMessage sm = new SendMessage();
+        sm.setChatId(update.getMessage().getChatId().toString());
+        sm.setText("Choose one the options bellow");
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        KeyboardRow row = new KeyboardRow();
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+        row.add("New picture");
+        row.add("Saved pictures");
+        row.add("Home");
+        keyboard.add(row);
+        replyKeyboardMarkup.setKeyboard(keyboard);
+        sm.setReplyMarkup(replyKeyboardMarkup);
+        return sm;
+    }
+
+    private SendMessage getDocuments(Update update) {
+        SendMessage sm = new SendMessage();
+        sm.setChatId(update.getMessage().getChatId().toString());
+        sm.setText("Choose one the options bellow:");
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        KeyboardRow row = new KeyboardRow();
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+        row.add("New document");
+        row.add("Saved documents");
+        row.add("Home");
+        keyboard.add(row);
+        replyKeyboardMarkup.setKeyboard(keyboard);
+        sm.setReplyMarkup(replyKeyboardMarkup);
+        return sm;
+    }
+
     private void savePicture(Update update) {
-        List<PhotoSize> photos = update.getMessage().getPhoto();
         String file_id = Objects.requireNonNull(update.getMessage().getPhoto().stream().max(Comparator.comparing(PhotoSize::getFileSize))
                 .orElse(null)).getFileId();
-//        String fileId = String.valueOf(update.getMessage().getPhoto().stream().max(Comparator.comparing(PhotoSize::getFileId)));
         Pictures picture = new Pictures();
         picture.setChatId(update.getMessage().getChatId());
         picture.setUpdateId(update.getUpdateId());
@@ -237,7 +242,6 @@ public class MyTeleBot extends TelegramLongPollingBot {
                     InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
                     inlineKeyboardButton1.setText("Delete");
                     inlineKeyboardButton1.setCallbackData(p.getUpdateId().toString());
-                    System.out.println(p.getUpdateId().toString());
                     List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
                     keyboardButtonsRow.add(inlineKeyboardButton1);
                     List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
@@ -327,11 +331,9 @@ public class MyTeleBot extends TelegramLongPollingBot {
         KeyboardRow row2 = new KeyboardRow();
         KeyboardRow row3 = new KeyboardRow();
         KeyboardRow row4 = new KeyboardRow();
-
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboard(false);
-
         //тут код, чтобы отобразить категории из базы в виде кнопок меню
         if (!categories.isEmpty()) {
             for (Category category : categories) {
@@ -424,8 +426,6 @@ public class MyTeleBot extends TelegramLongPollingBot {
             tgUser.setActive(false);
         }
         else {
-            //default keyboard + help with commands
-            //TODO method for default keyboard
             commandList.processWrongMessages(HELP.getNameOfCommand()).executeCommand(update);
         }
     }
@@ -465,7 +465,6 @@ public class MyTeleBot extends TelegramLongPollingBot {
         List<InlineKeyboardButton> keyboardButtonsRow_3 = new ArrayList<>();
         List<InlineKeyboardButton> keyboardButtonsRow_4 = new ArrayList<>();
         List<List<InlineKeyboardButton>> rowList_new = new ArrayList<>();
-        InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
         if (!categories.isEmpty()) {
             sm.setText("\uD83E\uDDA9 Chose one of the collections: \uD83E\uDDA9");
             for (Category category : categories) {
@@ -492,7 +491,6 @@ public class MyTeleBot extends TelegramLongPollingBot {
             rowList_new.add(keyboardButtonsRow_4);
             inlineKeyboardMarkup.setKeyboard(rowList_new);
             sm.setReplyMarkup(inlineKeyboardMarkup);
-            //кнопки меню
 
         } else {
             sm.setText("You have no collections");
@@ -563,7 +561,6 @@ public class MyTeleBot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
-
 
     //универсальный метод, который получает на вход значение коллекции и чат айди и ищет все заметки,
     // сохраненные для данной коллеции
@@ -661,33 +658,27 @@ public class MyTeleBot extends TelegramLongPollingBot {
     }
     public void deleteCollection(String callbackData, String chatId) {
         List<Category> categories = categoryInterface.getAllCategories();
+        String collection = callbackData.substring(2);
         for (Category c : categories) {
             if(chatId.equals(c.getChatId().toString())){
-                String collection = callbackData.substring(2);
                 if (c.getCategoryName().equals(collection)) {
                     categoryInterface.delete(c);
                 }
             }
+        } //удаляем все заметки к этой коллекции
+        List<Note> notes = noteInterface.getAllNotes();
+        for (Note n:notes){
+            if(chatId.equals(n.getChatId().toString())&&n.getCategoryName().equals(collection)){
+                noteInterface.delete(n);
+            }
         }
         SendMessage sm = new SendMessage();
         sm.setChatId(chatId);
-        sm.setText("This category was deleted!");
+        sm.setText("This collection was deleted!");
         try {
             execute(sm);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
     }
-
-//++ клавиатура на удаление коллекции
-//List<KeyboardRow> keyboard = new ArrayList<>();
-//    KeyboardRow row = new KeyboardRow();
-//        replyKeyboardMarkup.setSelective(true);
-//        replyKeyboardMarkup.setResizeKeyboard(true);
-//        replyKeyboardMarkup.setOneTimeKeyboard(false);
-//        row.add("Delete collection");
-//        row.add("Home");
-//        keyboard.add(row);
-//        replyKeyboardMarkup.setKeyboard(keyboard);
-//        sm.setReplyMarkup(replyKeyboardMarkup);
 }

@@ -18,7 +18,9 @@ public class HelpCommand implements Command{
             "\n"+
             "/savedocument"+
             "\n"+
-            "/savepicture";
+            "/savepicture"+
+            "\n"+
+            "/deletecollection";
 
     private final SendMessageInterface sendMessageInterface;
 

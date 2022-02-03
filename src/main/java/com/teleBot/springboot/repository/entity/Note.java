@@ -30,8 +30,6 @@ public class Note {
     @Column(name="note_text")
     private String noteText;
 
-
-
     public Integer getUpdateId() {
         return updateId;
     }
@@ -47,14 +45,6 @@ public class Note {
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
-
-//    public String getNoteName() {
-//        return noteName;
-//    }
-//
-//    public void setNoteName(String noteName) {
-//        this.noteName = noteName;
-//    }
 
     public String getNoteText() {
         return noteText;
