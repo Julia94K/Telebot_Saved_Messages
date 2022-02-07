@@ -46,4 +46,7 @@ public class Category {
     public void setChatId(Long chatId) {
         this.chatId = chatId;
     }
+
+    @ManyToOne
+    private TgUser tgUser;
 }

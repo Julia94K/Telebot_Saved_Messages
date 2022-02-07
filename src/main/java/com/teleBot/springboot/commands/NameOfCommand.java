@@ -4,7 +4,6 @@ public enum NameOfCommand {
 
     START("/start"),
     HELP("/help"),
-    NOT(""),
     GET_CATEGORY("/getcategories"),
     GET_CATEGORY_TEXT("Collections"),
     SAVE_CATEGORY("/savecategory"),
@@ -13,8 +12,6 @@ public enum NameOfCommand {
     DELETE("/deletecollection"),
     PICTURE("/savepicture"),
     DOCUMENT("/savedocument");
-
-
 
     private final String nameOfCommand;
 

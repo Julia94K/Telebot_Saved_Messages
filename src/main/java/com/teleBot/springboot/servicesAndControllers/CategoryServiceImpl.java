@@ -1,29 +1,22 @@
-package com.teleBot.springboot.functions;
+package com.teleBot.springboot.servicesAndControllers;
 
 import com.teleBot.springboot.repository.entity.CategoriesRepository;
 import com.teleBot.springboot.repository.entity.Category;
 import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
-//логика для этого класса еще не реализована
-//?нужна ли вообще отдельная логика или можно воспользоваться функцией send message
-//определить, является ли данный класс контроллером или сервисом
 @Controller
-@Service //нужна ли тут эта аннотация
-public class CategoryFunction implements CategoryInterface {
-
-
+@Service
+public class CategoryServiceImpl implements CategoryService {
     //создаем объект типа репозиторий
     private final CategoriesRepository categoriesRepository;
 
     //реализуем конструктор
     @Autowired
-    public CategoryFunction(CategoriesRepository categoriesRepository) {
+    public CategoryServiceImpl(CategoriesRepository categoriesRepository) {
         this.categoriesRepository = categoriesRepository;
     }
 

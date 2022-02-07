@@ -1,19 +1,19 @@
-package com.teleBot.springboot.functions;
+package com.teleBot.springboot.servicesAndControllers;
 
-import com.teleBot.springboot.repository.entity.Category;
 import com.teleBot.springboot.repository.entity.Note;
 import com.teleBot.springboot.repository.entity.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Controller
 @Service
-public class NoteFunction implements NoteInterface{
+public class NoteServiceImpl implements NoteService {
     private final NoteRepository noteRepository;
 
     @Autowired
-    public NoteFunction(NoteRepository noteRepository) {
+    public NoteServiceImpl(NoteRepository noteRepository) {
         this.noteRepository = noteRepository;
     }
 

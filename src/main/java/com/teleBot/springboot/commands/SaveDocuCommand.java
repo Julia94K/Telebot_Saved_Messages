@@ -1,19 +1,19 @@
 package com.teleBot.springboot.commands;
 
-import com.teleBot.springboot.functions.SendMessageInterface;
+import com.teleBot.springboot.servicesAndControllers.SendMessageService;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class SaveDocuCommand implements Command{
     String ADD_Docu = "Choose and send new document:";
-    private final SendMessageInterface sendMessageInterface;
+    private final SendMessageService sendMessageService;
 
-    public SaveDocuCommand(SendMessageInterface sendMessageInterface) {
-        this.sendMessageInterface = sendMessageInterface;
+    public SaveDocuCommand(SendMessageService sendMessageService) {
+        this.sendMessageService = sendMessageService;
     }
 
 
     @Override
     public void executeCommand(Update update){
-        sendMessageInterface.sendMessage(update.getMessage().getChatId().toString(),ADD_Docu);
+        sendMessageService.sendMessage(update.getMessage().getChatId().toString(),ADD_Docu);
     }
 }

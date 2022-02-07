@@ -1,9 +1,9 @@
 package com.teleBot.springboot.commands;
 
-import com.teleBot.springboot.functions.CategoryInterface;
-import com.teleBot.springboot.functions.NoteInterface;
-import com.teleBot.springboot.functions.SendMessageInterface;
-import com.teleBot.springboot.functions.TgUserInterface;
+import com.teleBot.springboot.servicesAndControllers.CategoryService;
+import com.teleBot.springboot.servicesAndControllers.NoteService;
+import com.teleBot.springboot.servicesAndControllers.SendMessageService;
+import com.teleBot.springboot.servicesAndControllers.TgUserService;
 
 import java.util.HashMap;
 import static com.teleBot.springboot.commands.NameOfCommand.*;
@@ -15,30 +15,24 @@ public class CommandList {
 
 
 //добавлен второй аргумент
-    public CommandList(SendMessageInterface sendMessageInterface, TgUserInterface tgUserInterface, CategoryInterface categoryInterface,
-                       NoteInterface noteInterface){
+    public CommandList(SendMessageService sendMessageService, TgUserService tgUserService, CategoryService categoryService,
+                       NoteService noteService){
 
         //add here all commands
-        commandMap.put(START.getNameOfCommand(),new StartCommand(sendMessageInterface));
-//        commandMap.put(STOP.getNameOfCommand(),new StopCommand(sendMessageInterface,tgUserInterface));
-        commandMap.put(HELP.getNameOfCommand(),new HelpCommand(sendMessageInterface));
-        commandMap.put(NOT.getNameOfCommand(),new NotACommand(sendMessageInterface));
-        commandMap.put(GET_CATEGORY.getNameOfCommand(),new GetCategoriesCommand(sendMessageInterface));
-        commandMap.put(SAVE_CATEGORY.getNameOfCommand(),new SaveNewCategoryCommand(sendMessageInterface,categoryInterface));
-        commandMap.put(SAVE_NOTE.getNameOfCommand(),new SaveNoteCommand(sendMessageInterface));
-        commandMap.put(DELETE.getNameOfCommand(),new DeleteCollectionCommand(sendMessageInterface));
-//        commandMap.put(SAVE_NOTE_TEXT.getNameOfCommand(),new SaveNoteCommand(sendMessageInterface));
-        commandMap.put(GET_NOTE.getNameOfCommand(),new GetNotesForCategoryCommand(sendMessageInterface,categoryInterface,noteInterface));
-        commandMap.put(DOCUMENT.getNameOfCommand(),new SaveDocuCommand(sendMessageInterface));
-        commandMap.put(PICTURE.getNameOfCommand(),new SavePictureCommand(sendMessageInterface));
-        unknownCommand = new UnknownCommand(sendMessageInterface);
-
-
+        commandMap.put(START.getNameOfCommand(),new StartCommand(sendMessageService));
+        commandMap.put(HELP.getNameOfCommand(),new HelpCommand(sendMessageService));
+        commandMap.put(GET_CATEGORY.getNameOfCommand(),new GetCategoriesCommand(sendMessageService));
+        commandMap.put(SAVE_CATEGORY.getNameOfCommand(),new SaveNewCategoryCommand(sendMessageService, categoryService));
+        commandMap.put(SAVE_NOTE.getNameOfCommand(),new SaveNoteCommand(sendMessageService));
+        commandMap.put(DELETE.getNameOfCommand(),new DeleteCollectionCommand(sendMessageService));
+        commandMap.put(GET_NOTE.getNameOfCommand(),new GetNotesForCategoryCommand(sendMessageService, categoryService, noteService));
+        commandMap.put(DOCUMENT.getNameOfCommand(),new SaveDocuCommand(sendMessageService));
+        commandMap.put(PICTURE.getNameOfCommand(),new SavePictureCommand(sendMessageService));
+        unknownCommand = new UnknownCommand(sendMessageService);
     }
 
 
     //обработка сообщений, которые не являются командами, ,будет браться дефолтное значение unknownCommand
-
     public Command processWrongMessages(String wrongMessage){
         return commandMap.getOrDefault(wrongMessage,unknownCommand);
     }

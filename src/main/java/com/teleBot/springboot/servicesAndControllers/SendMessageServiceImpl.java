@@ -1,26 +1,17 @@
-package com.teleBot.springboot.functions;
+package com.teleBot.springboot.servicesAndControllers;
 
 import com.teleBot.springboot.bot.MyTeleBot;
-import com.teleBot.springboot.repository.entity.TgUser;
+import org.springframework.stereotype.Controller;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-
-public class SendMessageFunction implements SendMessageInterface {
+@Controller
+public class SendMessageServiceImpl implements SendMessageService {
     private final MyTeleBot myTeleBot;
     InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
 
-    public SendMessageFunction(MyTeleBot myTeleBot) {
+    public SendMessageServiceImpl(MyTeleBot myTeleBot) {
         this.myTeleBot = myTeleBot;
     }
 

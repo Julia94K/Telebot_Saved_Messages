@@ -1,8 +1,8 @@
-package com.teleBot.springboot.other;
+package com.teleBot.springboot.servicesAndControllers;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public interface User {
+public interface UserService {
     void proceedSimpleMessage(Update update);
 
 }

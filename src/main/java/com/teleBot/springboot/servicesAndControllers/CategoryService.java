@@ -1,14 +1,11 @@
-package com.teleBot.springboot.functions;
+package com.teleBot.springboot.servicesAndControllers;
 
 import com.teleBot.springboot.repository.entity.Category;
-import org.springframework.data.jpa.repository.Query;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
-public interface CategoryInterface {
+public interface CategoryService {
     //save new category in DB
-
     void save (Category category);
 
     void delete (Category category);

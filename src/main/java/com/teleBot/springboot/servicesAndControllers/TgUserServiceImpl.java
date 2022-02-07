@@ -1,4 +1,4 @@
-package com.teleBot.springboot.functions;
+package com.teleBot.springboot.servicesAndControllers;
 
 import com.teleBot.springboot.repository.entity.TgUser;
 import com.teleBot.springboot.repository.entity.TgUserRepository;
@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-//@Controller
-public class TgUserFunction implements TgUserInterface{
+@Controller
+public class TgUserServiceImpl implements TgUserService {
 
     private final TgUserRepository tgUserRepository;
 
     @Autowired
-    public TgUserFunction(TgUserRepository tgUserRepository) {
+    public TgUserServiceImpl(TgUserRepository tgUserRepository) {
         this.tgUserRepository = tgUserRepository;
     }
 

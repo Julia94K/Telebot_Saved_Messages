@@ -30,6 +30,9 @@ public class Note {
     @Column(name="note_text")
     private String noteText;
 
+    @ManyToOne
+    private Category category;
+
     public Integer getUpdateId() {
         return updateId;
     }
