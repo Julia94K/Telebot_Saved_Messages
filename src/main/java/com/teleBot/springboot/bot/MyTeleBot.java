@@ -126,16 +126,16 @@ public class MyTeleBot extends TelegramLongPollingBot {
             updateUserStatus(update, message);
         }
         //метод для загрузки документа в БД
-        else if (update.hasMessage() && update.getMessage().hasDocument() && tgUser.getUserStatus().equals(2)) {
-//            saveDocument(update);
-            saveDoc(update);
-
+        else if (update.hasMessage() && update.getMessage().hasDocument()){
+            if(tgUser.getUserStatus().equals(2)){
+                saveDoc(update);
+            }
         }
         //метод для загрузки фото/картинок в БД
-        //
-        else if (update.hasMessage() && update.getMessage().hasPhoto() && tgUser.getUserStatus().equals(2)) {
-//            savePicture(update);
-            savePic(update);
+        else if (update.hasMessage() && update.getMessage().hasPhoto()) {
+            if(tgUser.getUserStatus().equals(2)){
+                savePic(update);
+            }
         }
         //if user pressed one of the buttons
         else if (update.hasCallbackQuery()) {
@@ -157,7 +157,6 @@ public class MyTeleBot extends TelegramLongPollingBot {
             for(MediaDocument d:docs){
                 toDeleteDocuments.add(d.getUpdateId().toString());
             }
-            //
             //метод для удаления заметки
             if (toDeleteNotes.contains(callData)) {
                 deleteNote(callData, chat_id);
@@ -226,11 +225,14 @@ public class MyTeleBot extends TelegramLongPollingBot {
         SendMessage sm = new SendMessage();
         sm.setText(savedMsg);
         sm.setChatId(update.getMessage().getChatId().toString());
+        tgUser.setUserStatus(3);
+        tgUser.setActive(false);
         try {
             execute(sm);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+
     }
 
     private void showPic(Update update, SendPhoto sendPhoto) {
@@ -284,6 +286,8 @@ public class MyTeleBot extends TelegramLongPollingBot {
         SendMessage sm = new SendMessage();
         sm.setText(savedMsg);
         sm.setChatId(update.getMessage().getChatId().toString());
+        tgUser.setUserStatus(3);
+        tgUser.setActive(false);
         try {
             execute(sm);
         } catch (TelegramApiException e) {
